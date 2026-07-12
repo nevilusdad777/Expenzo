@@ -47,29 +47,27 @@ export async function seedDefaultsForUser(
   db: Prisma.TransactionClient,
   userId: string
 ) {
-  for (const name of incomeCategories) {
-    await db.category.create({
-      data: {
-        id: categoryId(userId, 'income', name),
-        userId,
-        name,
-        type: CategoryType.INCOME,
-        isDefault: true,
-      },
-    });
-  }
+  // Bulk create income categories in a single query
+  await db.category.createMany({
+    data: incomeCategories.map((name) => ({
+      id: categoryId(userId, 'income', name),
+      userId,
+      name,
+      type: CategoryType.INCOME,
+      isDefault: true,
+    })),
+  });
 
-  for (const name of expenseCategories) {
-    await db.category.create({
-      data: {
-        id: categoryId(userId, 'expense', name),
-        userId,
-        name,
-        type: CategoryType.EXPENSE,
-        isDefault: true,
-      },
-    });
-  }
+  // Bulk create expense categories in a single query
+  await db.category.createMany({
+    data: expenseCategories.map((name) => ({
+      id: categoryId(userId, 'expense', name),
+      userId,
+      name,
+      type: CategoryType.EXPENSE,
+      isDefault: true,
+    })),
+  });
 
   const cashAccount = await db.account.create({
     data: {
