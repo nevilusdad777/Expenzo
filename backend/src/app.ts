@@ -20,6 +20,13 @@ app.use(
 	})
 );
 
+app.use((req, res, next) => {
+  console.log(`[Backend HTTP] ${req.method} ${req.path}`);
+  console.log(`  Auth Header:`, req.headers.authorization ? 'Present' : 'Missing');
+  console.log(`  Cookies:`, req.headers.cookie ? 'Present' : 'Missing');
+  next();
+});
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
