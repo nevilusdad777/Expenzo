@@ -18,7 +18,7 @@ export async function adminLogin(req: Request, res: Response, next: NextFunction
       secure: env.NODE_ENV === 'production',
     });
 
-    res.status(HTTP_STATUS.OK).json({ success: true, data: { admin } });
+    res.status(HTTP_STATUS.OK).json({ success: true, data: { admin, token } });
   } catch (err) {
     next(err);
   }

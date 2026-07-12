@@ -38,15 +38,19 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const login = async (email: string, password: string) => {
-    const r = await apiClient.post<{ success: boolean; data: { admin: AdminProfile } }>(
+    const r = await apiClient.post<{ success: boolean; data: { admin: AdminProfile; token: string } }>(
       '/api/admin/auth/login',
       { email, password }
     );
+    if (r.data.data.token) {
+      localStorage.setItem('admin_token', r.data.data.token);
+    }
     setAdmin(r.data.data.admin);
   };
 
   const logout = async () => {
     await apiClient.post('/api/admin/auth/logout');
+    localStorage.removeItem('admin_token');
     setAdmin(null);
   };
 

@@ -12,7 +12,10 @@ declare global {
 }
 
 export function adminGuard(req: Request, res: Response, next: NextFunction) {
-  const token = req.cookies?.[ADMIN_COOKIE];
+  let token = req.cookies?.[ADMIN_COOKIE];
+  if (!token && req.headers.authorization?.startsWith('Bearer ')) {
+    token = req.headers.authorization.split(' ')[1];
+  }
   const session = verifyAdminToken(token);
 
   if (!session) {
@@ -27,7 +30,10 @@ export function adminGuard(req: Request, res: Response, next: NextFunction) {
 }
 
 export function optionalAdminAuth(req: Request, _res: Response, next: NextFunction) {
-  const token = req.cookies?.[ADMIN_COOKIE];
+  let token = req.cookies?.[ADMIN_COOKIE];
+  if (!token && req.headers.authorization?.startsWith('Bearer ')) {
+    token = req.headers.authorization.split(' ')[1];
+  }
   const session = verifyAdminToken(token);
   if (session) {
     req.adminSession = { adminId: session.adminId };

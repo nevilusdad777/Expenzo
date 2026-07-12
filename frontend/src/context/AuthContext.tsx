@@ -46,6 +46,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Check session on mount
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const urlToken = params.get('token');
+    if (urlToken) {
+      localStorage.setItem('session_token', urlToken);
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+
     apiClient
       .get<{ success: boolean; data: { authenticated: boolean; user: AuthUser | null } }>(
         '/api/auth/me'
@@ -62,8 +69,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = useCallback(async (email: string, password: string) => {
     const res = await apiClient.post<{
       success: boolean;
-      data: { user: AuthUser; autoLockMinutes: number };
+      data: { user: AuthUser; token: string; autoLockMinutes: number };
     }>('/api/auth/login', { email, password });
+    if (res.data.data.token) {
+      localStorage.setItem('session_token', res.data.data.token);
+    }
     setUser(res.data.data.user);
     setAutoLockMinutes(res.data.data.autoLockMinutes);
   }, []);
@@ -71,14 +81,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const register = useCallback(async (name: string, email: string, password: string) => {
     const res = await apiClient.post<{
       success: boolean;
-      data: { user: AuthUser; autoLockMinutes: number };
+      data: { user: AuthUser; token: string; autoLockMinutes: number };
     }>('/api/auth/register', { name, email, password, confirmPassword: password });
+    if (res.data.data.token) {
+      localStorage.setItem('session_token', res.data.data.token);
+    }
     setUser(res.data.data.user);
     setAutoLockMinutes(res.data.data.autoLockMinutes);
   }, []);
 
   const logout = useCallback(async () => {
     await apiClient.post('/api/auth/logout').catch(() => {});
+    localStorage.removeItem('session_token');
     setUser(null);
   }, []);
 

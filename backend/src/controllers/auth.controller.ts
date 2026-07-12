@@ -30,7 +30,7 @@ export async function register(req: Request, res: Response, next: NextFunction) 
     setSessionCookie(res, token, autoLockMinutes);
     res.status(HTTP_STATUS.CREATED).json({
       success: true,
-      data: { user, autoLockMinutes },
+      data: { user, token, autoLockMinutes },
     });
   } catch (err) {
     next(err);
@@ -43,7 +43,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
     setSessionCookie(res, token, autoLockMinutes);
     res.status(HTTP_STATUS.OK).json({
       success: true,
-      data: { user, autoLockMinutes },
+      data: { user, token, autoLockMinutes },
     });
   } catch (err) {
     next(err);
@@ -79,7 +79,7 @@ export async function googleCallback(req: Request, res: Response, next: NextFunc
 
     const { token, autoLockMinutes } = await authService.googleLoginOrRegister(profile);
     setSessionCookie(res, token, autoLockMinutes);
-    res.redirect(env.APP_BASE_URL);
+    res.redirect(`${env.APP_BASE_URL}?token=${token}`);
   } catch (err) {
     next(err);
   }

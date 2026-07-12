@@ -11,7 +11,10 @@ function getAutoLockMinutes(config: { autoLockMinutes: number } | null) {
 }
 
 export async function authGuard(req: Request, res: Response, next: NextFunction) {
-  const token = req.cookies?.[COOKIE_NAME];
+  let token = req.cookies?.[COOKIE_NAME];
+  if (!token && req.headers.authorization?.startsWith('Bearer ')) {
+    token = req.headers.authorization.split(' ')[1];
+  }
   const session = verifySessionToken(token);
 
   if (!session) {
@@ -25,10 +28,11 @@ export async function authGuard(req: Request, res: Response, next: NextFunction)
   const autoLockMinutes = getAutoLockMinutes(config);
   const freshToken = issueSessionToken(session.userId, autoLockMinutes);
 
+  const isProd = env.NODE_ENV === 'production';
   res.cookie(COOKIE_NAME, freshToken, {
     httpOnly: true,
-    sameSite: 'lax',
-    secure: env.NODE_ENV === 'production',
+    sameSite: isProd ? 'none' : 'lax',
+    secure: isProd,
     maxAge: autoLockMinutes * 60 * 1000,
   });
 
@@ -37,7 +41,10 @@ export async function authGuard(req: Request, res: Response, next: NextFunction)
 }
 
 export function optionalAuth(req: Request, _res: Response, next: NextFunction) {
-  const token = req.cookies?.[COOKIE_NAME];
+  let token = req.cookies?.[COOKIE_NAME];
+  if (!token && req.headers.authorization?.startsWith('Bearer ')) {
+    token = req.headers.authorization.split(' ')[1];
+  }
   const session = verifySessionToken(token);
   if (session) {
     req.session = { unlocked: true, userId: session.userId };
