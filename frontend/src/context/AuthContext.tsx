@@ -122,10 +122,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const verifyOTP = useCallback(async (code: string) => {
-    const res = await apiClient.post<{ success: boolean; data: { user: AuthUser } }>(
+    const res = await apiClient.post<{ success: boolean; data: { user: AuthUser; token: string } }>(
       '/api/auth/verify-otp',
       { code }
     );
+    if (res.data.data.token) {
+      localStorage.setItem('session_token', res.data.data.token);
+    }
     setUser(res.data.data.user);
   }, []);
 

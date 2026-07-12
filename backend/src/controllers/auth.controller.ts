@@ -2,6 +2,8 @@ import { NextFunction, Request, Response } from 'express';
 import * as authService from '../services/auth.service';
 import { HTTP_STATUS } from '../config/constants';
 import { env } from '../config/env';
+import { issueSessionToken } from '../utils/sessionToken';
+import * as configRepo from '../repositories/appConfig.repository';
 
 const COOKIE_NAME = 'session_token';
 
@@ -100,7 +102,14 @@ export async function verifyOTP(req: Request, res: Response, next: NextFunction)
   try {
     const { code } = req.body as { code: string };
     const user = await authService.verifyOTP(req.session!.userId, code);
-    res.status(HTTP_STATUS.OK).json({ success: true, data: { user } });
+
+    const config = await configRepo.getConfig();
+    const autoLockMinutes = config?.autoLockMinutes ?? env.AUTO_LOCK_MINUTES;
+    const token = issueSessionToken(user.id, autoLockMinutes);
+
+    setSessionCookie(res, token, autoLockMinutes);
+
+    res.status(HTTP_STATUS.OK).json({ success: true, data: { user, token } });
   } catch (err) {
     next(err);
   }

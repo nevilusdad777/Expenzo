@@ -11,9 +11,12 @@ function getAutoLockMinutes(config: { autoLockMinutes: number } | null) {
 }
 
 export async function authGuard(req: Request, res: Response, next: NextFunction) {
-  let token = req.cookies?.[COOKIE_NAME];
-  if (!token && req.headers.authorization?.startsWith('Bearer ')) {
+  let token = undefined;
+  if (req.headers.authorization?.startsWith('Bearer ')) {
     token = req.headers.authorization.split(' ')[1];
+  }
+  if (!token) {
+    token = req.cookies?.[COOKIE_NAME];
   }
   const session = verifySessionToken(token);
 
@@ -41,9 +44,12 @@ export async function authGuard(req: Request, res: Response, next: NextFunction)
 }
 
 export function optionalAuth(req: Request, _res: Response, next: NextFunction) {
-  let token = req.cookies?.[COOKIE_NAME];
-  if (!token && req.headers.authorization?.startsWith('Bearer ')) {
+  let token = undefined;
+  if (req.headers.authorization?.startsWith('Bearer ')) {
     token = req.headers.authorization.split(' ')[1];
+  }
+  if (!token) {
+    token = req.cookies?.[COOKIE_NAME];
   }
   const session = verifySessionToken(token);
   if (session) {
