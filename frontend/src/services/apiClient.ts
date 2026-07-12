@@ -20,6 +20,7 @@ export const apiClient = axios.create({
 apiClient.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('session_token') || localStorage.getItem('admin_token');
+    console.log('[Expenzo API] Request:', config.method?.toUpperCase(), config.url, 'Has Token:', !!token);
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

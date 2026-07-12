@@ -71,6 +71,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       success: boolean;
       data: { user: AuthUser; token: string; autoLockMinutes: number };
     }>('/api/auth/login', { email, password });
+    console.log('[Expenzo Auth] Login response:', res.data.data);
     if (res.data.data.token) {
       localStorage.setItem('session_token', res.data.data.token);
     }
@@ -83,6 +84,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       success: boolean;
       data: { user: AuthUser; token: string; autoLockMinutes: number };
     }>('/api/auth/register', { name, email, password, confirmPassword: password });
+    console.log('[Expenzo Auth] Register response:', res.data.data);
     if (res.data.data.token) {
       localStorage.setItem('session_token', res.data.data.token);
     }
