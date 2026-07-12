@@ -1,0 +1,104 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+  --radius-card: 1rem;
+  --radius-button: 0.75rem;
+  --radius-pill: 9999px;
+
+  --color-background: #0a0a0f;
+  --color-surface: #14141c;
+  --color-surface-elevated: #1c1c26;
+  --color-surface-hover: #22222e;
+
+  --color-border: #26262f;
+  --color-border-strong: #35354280;
+
+  --color-primary: #6366f1;
+  --color-primary-hover: #818cf8;
+  --color-primary-muted: #6366f11a;
+
+  --color-success: #22c55e;
+  --color-success-muted: #22c55e1a;
+  --color-danger: #ef4444;
+  --color-danger-muted: #ef44441a;
+  --color-warning: #f59e0b;
+  --color-warning-muted: #f59e0b1a;
+
+  --color-text-primary: #f4f4f5;
+  --color-text-secondary: #a1a1aa;
+  --color-text-muted: #71717a;
+
+  --color-gradient-start: #6366f1;
+  --color-gradient-end: #a855f7;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html,
+  body {
+    height: 100%;
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    margin: 0;
+    min-width: 320px;
+    background-image:
+      radial-gradient(circle at top, rgba(99, 102, 241, 0.18), transparent 35%),
+      radial-gradient(circle at bottom right, rgba(34, 197, 94, 0.08), transparent 30%);
+  }
+
+  #root {
+    height: 100%;
+  }
+
+  ::selection {
+    background-color: var(--color-primary-muted);
+    color: var(--color-text-primary);
+  }
+}
+
+@layer utilities {
+  .glass {
+    background: rgba(28, 28, 38, 0.6);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .glass-elevated {
+    background: rgba(34, 34, 46, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .gradient-primary {
+    background: linear-gradient(135deg, var(--color-gradient-start), var(--color-gradient-end));
+  }
+
+  .gradient-text {
+    background: linear-gradient(135deg, var(--color-gradient-start), var(--color-gradient-end));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: var(--radius-pill);
+  }
+}

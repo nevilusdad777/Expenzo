@@ -1,0 +1,168 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  passwordHash  String?
+  name          String
+  googleId      String?   @unique
+  emailVerified Boolean   @default(false)
+  role          String    @default("USER")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts          Account[]
+  categories        Category[]
+  transactions      Transaction[]
+  passwordResetTokens PasswordResetToken[]
+  emailVerification   EmailVerification?
+}
+
+// Separate Admin model — completely independent from users
+model Admin {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String   @default("Administrator")
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+// AppConfig — single-row table, app-wide settings (auto-lock minutes)
+model AppConfig {
+  id                 Int       @id @default(1)
+  pinHash            String?
+  failedAttempts     Int       @default(0)
+  lockedUntil        DateTime?
+  autoLockMinutes    Int       @default(60)
+  webauthnCredential String?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([token])
+  @@index([userId])
+}
+
+model EmailVerification {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  code      String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+enum AccountType {
+  CASH
+  BANK
+  WALLET
+  CREDIT_CARD
+  INVESTMENT
+  OTHER
+}
+
+model Account {
+  id         String      @id @default(cuid())
+  userId     String
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name       String
+  type       AccountType @default(OTHER)
+  icon       String?
+  color      String?
+  balance    Float       @default(0)
+  isArchived Boolean     @default(false)
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+
+  transactionsFrom Transaction[] @relation("SourceAccount")
+  transactionsTo   Transaction[] @relation("DestinationAccount")
+  balanceHistory   AccountBalanceHistory[]
+
+  @@index([userId])
+  @@index([isArchived])
+}
+
+enum CategoryType {
+  INCOME
+  EXPENSE
+}
+
+model Category {
+  id        String       @id @default(cuid())
+  userId    String
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String
+  type      CategoryType
+  icon      String?
+  color     String?
+  isDefault Boolean      @default(false)
+  parentId  String?
+  parent    Category?    @relation("Subcategories", fields: [parentId], references: [id], onDelete: SetNull)
+  children  Category[]   @relation("Subcategories")
+  createdAt DateTime     @default(now())
+
+  transactions Transaction[]
+
+  @@index([userId])
+  @@index([type])
+  @@index([parentId])
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+  TRANSFER
+}
+
+model Transaction {
+  id              String          @id @default(cuid())
+  userId          String
+  user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type            TransactionType
+  amount          Float
+  date            DateTime
+  accountId       String
+  account         Account         @relation("SourceAccount", fields: [accountId], references: [id], onDelete: Restrict)
+  toAccountId     String?
+  toAccount       Account?        @relation("DestinationAccount", fields: [toAccountId], references: [id], onDelete: Restrict)
+  categoryId      String?
+  category        Category?       @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  description     String?
+  paymentMethod   String?
+  referenceNumber String?
+  tags            String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@index([userId])
+  @@index([date, type])
+  @@index([accountId])
+  @@index([categoryId])
+  @@index([referenceNumber])
+}
+
+model AccountBalanceHistory {
+  id         String   @id @default(cuid())
+  accountId  String
+  account    Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  balance    Float
+  recordedAt DateTime @default(now())
+
+  @@index([accountId, recordedAt])
+}

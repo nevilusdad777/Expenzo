@@ -1,0 +1,40 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Environment variables (real secrets — never commit these)
+.env
+!.env.example
+backend/.env
+frontend/.env
+
+# Build outputs
+dist/
+build/
+frontend/dist/
+backend/dist/
+
+# Database
+backend/prisma/*.db
+backend/prisma/*.db-journal
+*.sqlite
+*.sqlite3
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Editor/OS
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+
+# Testing
+coverage/
+
+# PWA generated
+frontend/dev-dist/
