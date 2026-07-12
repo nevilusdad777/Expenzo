@@ -15,7 +15,8 @@
     "icons:generate": "npm run icons:generate --workspace=frontend",
     "smoke-test": "npm run smoke-test --workspace=backend",
     "deploy:build": "node scripts/deploy-build.mjs",
-    "start:prod": "npm run deploy:build && npm run start --workspace=backend"
+    "start:prod": "npm run deploy:build && npm run start --workspace=backend",
+    "start": "npm run start --workspace=backend"
   },
   "engines": {
     "node": ">=20.0.0"
