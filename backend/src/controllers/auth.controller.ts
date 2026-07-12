@@ -6,10 +6,11 @@ import { env } from '../config/env';
 const COOKIE_NAME = 'session_token';
 
 function setSessionCookie(res: Response, token: string, autoLockMinutes: number) {
+  const isProd = env.NODE_ENV === 'production';
   res.cookie(COOKIE_NAME, token, {
     httpOnly: true,
-    sameSite: 'lax',
-    secure: env.NODE_ENV === 'production',
+    sameSite: isProd ? 'none' : 'lax',
+    secure: isProd,
     maxAge: autoLockMinutes * 60 * 1000,
   });
 }

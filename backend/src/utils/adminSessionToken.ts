@@ -32,8 +32,11 @@ export function verifyAdminToken(token: string | undefined): AdminSessionPayload
   }
 }
 
+const isProd = process.env.NODE_ENV === 'production';
+
 export const ADMIN_COOKIE_OPTIONS = {
   httpOnly: true,
-  sameSite: 'lax' as const,
+  sameSite: (isProd ? 'none' : 'lax') as 'none' | 'lax',
+  secure: isProd,
   maxAge: ADMIN_SESSION_HOURS * 60 * 60 * 1000,
 };
