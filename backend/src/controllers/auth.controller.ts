@@ -13,6 +13,7 @@ function setSessionCookie(res: Response, token: string, autoLockMinutes: number)
     httpOnly: true,
     sameSite: isProd ? 'none' : 'lax',
     secure: isProd,
+    path: '/',
     maxAge: autoLockMinutes * 60 * 1000,
   });
 }

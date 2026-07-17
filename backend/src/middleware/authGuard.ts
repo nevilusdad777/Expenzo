@@ -21,6 +21,7 @@ export async function authGuard(req: Request, res: Response, next: NextFunction)
   const session = verifySessionToken(token);
 
   if (!session) {
+    console.log('[authGuard] Token verification failed! Token:', token);
     return res.status(HTTP_STATUS.UNAUTHORIZED).json({
       success: false,
       message: 'Authentication required. Please log in.',
@@ -36,6 +37,7 @@ export async function authGuard(req: Request, res: Response, next: NextFunction)
     httpOnly: true,
     sameSite: isProd ? 'none' : 'lax',
     secure: isProd,
+    path: '/',
     maxAge: autoLockMinutes * 60 * 1000,
   });
 

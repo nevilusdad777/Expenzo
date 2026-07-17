@@ -18,6 +18,13 @@ export function createConfigWithoutPin() {
   });
 }
 
+export async function ensureConfigExists() {
+  const config = await getConfig();
+  if (!config) {
+    await createConfigWithoutPin();
+  }
+}
+
 export function updatePinHash(pinHash: string) {
   return prisma.appConfig.update({
     where: { id: CONFIG_ID },

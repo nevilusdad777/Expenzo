@@ -39,5 +39,6 @@ export const ADMIN_COOKIE_OPTIONS = {
   httpOnly: true,
   sameSite: (isProd ? 'none' : 'lax') as 'none' | 'lax',
   secure: isProd,
+  path: '/',
   maxAge: ADMIN_SESSION_HOURS * 60 * 60 * 1000,
 };
