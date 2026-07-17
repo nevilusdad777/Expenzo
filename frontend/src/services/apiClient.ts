@@ -22,7 +22,15 @@ apiClient.interceptors.request.use(
     const token = localStorage.getItem('session_token') || localStorage.getItem('admin_token');
     console.log('[Expenzo API] Request:', config.method?.toUpperCase(), config.url, 'Has Token:', !!token);
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      config.headers['Authorization'] = `Bearer ${token}`;
+      if (config.headers && typeof config.headers.set === 'function') {
+        config.headers.set('Authorization', `Bearer ${token}`);
+      }
+    }
+    // Add cache buster to GET requests to bypass stuck Service Worker caches
+    if (config.method?.toLowerCase() === 'get' && config.url) {
+      const separator = config.url.includes('?') ? '&' : '?';
+      config.url = `${config.url}${separator}_cb=${Date.now()}`;
     }
     return config;
   },
@@ -32,6 +40,11 @@ apiClient.interceptors.request.use(
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem('session_token');
+      localStorage.removeItem('admin_token');
+      window.dispatchEvent(new Event('auth_unauthorized'));
+    }
     const message =
       error.response?.data?.message ?? error.message ?? 'Unexpected network error';
     const wrappedError = new Error(message) as Error & { status?: number };
