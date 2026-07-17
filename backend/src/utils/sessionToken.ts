@@ -24,7 +24,8 @@ export function verifySessionToken(token: string | undefined): SessionPayload | 
     const data = payload as { unlocked?: boolean; userId?: string };
     if (data.unlocked !== true || !data.userId) return null;
     return { unlocked: true, userId: data.userId };
-  } catch {
+  } catch (err) {
+    console.error('[verifySessionToken] Token verification failed:', err);
     return null;
   }
 }

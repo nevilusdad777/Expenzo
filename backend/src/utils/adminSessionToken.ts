@@ -27,7 +27,8 @@ export function verifyAdminToken(token: string | undefined): AdminSessionPayload
     const data = payload as { adminId?: string };
     if (!data.adminId) return null;
     return { adminId: data.adminId };
-  } catch {
+  } catch (err) {
+    console.error('[verifyAdminToken] Token verification failed:', err);
     return null;
   }
 }
