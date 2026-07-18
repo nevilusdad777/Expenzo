@@ -28,10 +28,10 @@ export function DashboardPage() {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6 pb-6">
       <BalanceCard totalBalance={summary.totalBalance} netSavings={summary.netSavings} />
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-2 gap-6">
         <SummaryCard
           label="Income (This Month)"
           amount={summary.monthlyIncome}
@@ -46,27 +46,20 @@ export function DashboardPage() {
         />
       </div>
 
-      <div className="flex gap-3">
-        <Button className="flex-1" onClick={() => navigate('/transactions/new?type=INCOME')}>
-          + Add Income
-        </Button>
-        <Button
-          variant="danger"
-          className="flex-1"
-          onClick={() => navigate('/transactions/new?type=EXPENSE')}
-        >
-          + Add Expense
-        </Button>
-      </div>
+      {trend && (
+        <div className="grid grid-cols-1 gap-6">
+          <MonthlyTrendChart data={trend} />
+        </div>
+      )}
 
-      {trend && <MonthlyTrendChart data={trend} />}
-
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <CategoryPieChart data={summary.topExpenseCategories} />
         <RecentTransactionsList transactions={summary.recentTransactions} />
       </div>
 
-      <AccountBalancesList />
+      <div className="grid grid-cols-1 gap-6">
+        <AccountBalancesList />
+      </div>
     </div>
   );
 }

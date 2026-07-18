@@ -7,31 +7,59 @@
   --radius-button: 0.75rem;
   --radius-pill: 9999px;
 
-  --color-background: #0a0a0f;
-  --color-surface: #14141c;
-  --color-surface-elevated: #1c1c26;
-  --color-surface-hover: #22222e;
+  --color-on-secondary-fixed: #001a42;
+  --color-secondary-container: #0566d9;
+  --color-on-surface-variant: #c7c4d8;
+  --color-surface-variant: #353437;
+  --color-tertiary-container: #009eb9;
+  --color-on-primary-fixed-variant: #3622ca;
+  --color-surface-dim: #131315;
+  --color-primary: #c4c0ff;
+  --color-surface-bright: #39393b;
+  --color-secondary-fixed-dim: #adc6ff;
+  --color-surface-container: #201f22;
+  --color-surface-tint: #c4c0ff;
+  --color-tertiary-fixed: #acedff;
+  --color-outline-variant: #464555;
+  --color-on-surface: #e5e1e4;
+  --color-on-tertiary-fixed: #001f26;
+  --color-on-secondary-fixed-variant: #004395;
+  --color-on-primary: #2000a4;
+  --color-secondary-fixed: #d8e2ff;
+  --color-secondary: #adc6ff;
+  --color-tertiary: #4cd7f6;
+  --color-inverse-on-surface: #313032;
+  --color-surface-container-lowest: #0e0e10;
+  --color-primary-fixed: #e3dfff;
+  --color-on-error: #690005;
+  --color-background: #09090b;
+  --color-on-secondary-container: #e6ecff;
+  --color-on-error-container: #ffdad6;
+  --color-primary-container: #8781ff;
+  --color-on-tertiary-container: #002f38;
+  --color-tertiary-fixed-dim: #4cd7f6;
+  --color-on-background: #e5e1e4;
+  --color-surface-container-highest: #353437;
+  --color-surface-container-low: #1c1b1d;
+  --color-on-tertiary: #003640;
+  --color-on-primary-fixed: #100069;
+  --color-surface: #131315;
+  --color-on-tertiary-fixed-variant: #004e5c;
+  --color-outline: #918fa1;
+  --color-error: #ffb4ab;
+  --color-surface-container-high: #2a2a2c;
+  --color-error-container: #93000a;
+  --color-on-secondary: #002e6a;
+  --color-on-primary-container: #1b0091;
+  --color-primary-fixed-dim: #c4c0ff;
+  --color-inverse-primary: #4f44e2;
+  --color-inverse-surface: #e5e1e4;
 
-  --color-border: #26262f;
-  --color-border-strong: #35354280;
-
-  --color-primary: #6366f1;
-  --color-primary-hover: #818cf8;
-  --color-primary-muted: #6366f11a;
-
-  --color-success: #22c55e;
-  --color-success-muted: #22c55e1a;
-  --color-danger: #ef4444;
-  --color-danger-muted: #ef44441a;
-  --color-warning: #f59e0b;
-  --color-warning-muted: #f59e0b1a;
-
-  --color-text-primary: #f4f4f5;
-  --color-text-secondary: #a1a1aa;
-  --color-text-muted: #71717a;
-
-  --color-gradient-start: #6366f1;
-  --color-gradient-end: #a855f7;
+  --color-surface-elevated: #201f22;
+  --color-text-primary: #e5e1e4;
+  --color-text-secondary: #c7c4d8;
+  --color-text-muted: #918fa1;
+  --color-border: rgba(255, 255, 255, 0.08);
 }
 
 @layer base {
@@ -51,9 +79,11 @@
   body {
     margin: 0;
     min-width: 320px;
-    background-image:
-      radial-gradient(circle at top, rgba(99, 102, 241, 0.18), transparent 35%),
-      radial-gradient(circle at bottom right, rgba(34, 197, 94, 0.08), transparent 30%);
+    background-color: var(--color-background);
+    background-image: 
+      radial-gradient(circle at 15% 50%, rgba(196, 192, 255, 0.03) 0%, transparent 50%),
+      radial-gradient(circle at 85% 30%, rgba(76, 215, 246, 0.02) 0%, transparent 50%);
+    background-attachment: fixed;
   }
 
   #root {
@@ -61,32 +91,33 @@
   }
 
   ::selection {
-    background-color: var(--color-primary-muted);
-    color: var(--color-text-primary);
+    background-color: var(--color-primary-container);
+    color: var(--color-on-primary-container);
   }
 }
 
 @layer utilities {
-  .glass {
-    background: rgba(28, 28, 38, 0.6);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+  .glass,
+  .glass-panel {
+    background: rgba(19, 19, 21, 0.55);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.08);
   }
 
   .glass-elevated {
-    background: rgba(34, 34, 46, 0.7);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(28, 28, 38, 0.75);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
   }
 
   .gradient-primary {
-    background: linear-gradient(135deg, var(--color-gradient-start), var(--color-gradient-end));
+    background: linear-gradient(135deg, var(--color-primary-container), var(--color-tertiary));
   }
 
   .gradient-text {
-    background: linear-gradient(135deg, var(--color-gradient-start), var(--color-gradient-end));
+    background: linear-gradient(135deg, var(--color-primary), var(--color-tertiary));
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -98,7 +129,7 @@
   }
 
   .scrollbar-thin::-webkit-scrollbar-thumb {
-    background: var(--color-border);
+    background: var(--color-outline-variant);
     border-radius: var(--radius-pill);
   }
 }
