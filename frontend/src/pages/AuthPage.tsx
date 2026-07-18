@@ -108,7 +108,7 @@ export function AuthPage() {
           
           {/* Header */}
           <div className="flex flex-col items-center gap-2 text-center">
-            <h1 className="text-4xl font-bold tracking-tight text-primary">Expenzo</h1>
+            <h1 className="text-4xl font-bold tracking-tight text-primary">Vyntra</h1>
             <h2 className="text-xl font-bold text-white mt-1">
               {isLogin ? 'Welcome back' : 'Create your account'}
             </h2>

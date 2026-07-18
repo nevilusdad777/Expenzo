@@ -14,8 +14,8 @@ export default defineConfig({
 			registerType: 'autoUpdate',
 			includeAssets: ['favicon.ico', 'icons/*.png'],
 			manifest: {
-				name: 'Expenzo Finance Manager',
-				short_name: 'Expenzo',
+				name: 'Vyntra Finance Manager',
+				short_name: 'Vyntra',
 				description:
 					'Track income, expenses, and accounts privately and securely.',
 				theme_color: '#0a0a0f',
@@ -46,23 +46,7 @@ export default defineConfig({
 				globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
 				runtimeCaching: [
 					{
-						urlPattern: ({ url, request }) =>
-							url.pathname.startsWith('/api/') && request.method === 'GET',
-						handler: 'StaleWhileRevalidate',
-						options: {
-							cacheName: 'api-get-cache',
-							expiration: {
-								maxEntries: 200,
-								maxAgeSeconds: 60 * 60 * 24 * 7,
-							},
-							cacheableResponse: {
-								statuses: [0, 200],
-							},
-						},
-					},
-					{
-						urlPattern: ({ url, request }) =>
-							url.pathname.startsWith('/api/') && request.method !== 'GET',
+						urlPattern: ({ url }) => url.pathname.startsWith('/api/'),
 						handler: 'NetworkOnly',
 					},
 				],

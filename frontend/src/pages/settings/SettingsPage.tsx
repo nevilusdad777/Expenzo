@@ -76,7 +76,7 @@ export function SettingsPage() {
             <h1 className="text-xl font-bold text-white mb-1">{user.name}</h1>
             <p className="text-sm text-on-surface-variant mb-3">{user.email}</p>
             <div className="inline-flex items-center gap-2 bg-primary/20 border border-primary/50 rounded-full px-3 py-1">
-              <span className="text-[10px] font-bold text-primary uppercase tracking-widest">Expenzo Black</span>
+              <span className="text-[10px] font-bold text-primary uppercase tracking-widest">Vyntra Black</span>
             </div>
           </div>
           <div className="relative z-10">
