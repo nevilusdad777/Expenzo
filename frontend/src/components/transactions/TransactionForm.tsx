@@ -79,6 +79,7 @@ export function TransactionForm({
   const canSubmit =
     amountNum > 0 &&
     accountId.length > 0 &&
+    description.trim().length > 0 &&
     (type === 'TRANSFER'
       ? toAccountId.length > 0 && toAccountId !== accountId
       : categoryId.length > 0);
@@ -95,7 +96,7 @@ export function TransactionForm({
       ...(type === 'TRANSFER'
         ? { toAccountId }
         : { categoryId }),
-      ...(description.trim() ? { description: description.trim() } : {}),
+      description: description.trim(),
       ...(paymentMethod.trim() ? { paymentMethod: paymentMethod.trim() } : {}),
       ...(referenceNumber.trim() ? { referenceNumber: referenceNumber.trim() } : {}),
       tags,
@@ -212,10 +213,10 @@ export function TransactionForm({
         )}
 
         <Input
-          label="Description"
+          label="Description *"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          placeholder="Optional"
+          placeholder="e.g., Coffee, grocery shopping..."
         />
 
         <Input

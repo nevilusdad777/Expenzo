@@ -9,7 +9,7 @@ const baseTransactionSchema = z.object({
   accountId: z.string().min(1),
   toAccountId: z.string().optional(),
   categoryId: z.string().optional(),
-  description: z.string().max(200).optional(),
+  description: z.string().min(1, 'Description is required').max(200),
   paymentMethod: z.string().max(50).optional(),
   referenceNumber: z.string().max(100).optional(),
   tags: z.array(z.string().max(30)).max(10).default([]),

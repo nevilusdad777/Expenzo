@@ -101,7 +101,7 @@ export async function editTransaction(userId: string, id: string, input: UpdateT
     accountId: input.accountId ?? existing.accountId,
     toAccountId: input.toAccountId ?? existing.toAccountId ?? undefined,
     categoryId: input.categoryId ?? existing.categoryId ?? undefined,
-    description: input.description ?? existing.description ?? undefined,
+    description: input.description ?? existing.description ?? '',
     paymentMethod: input.paymentMethod ?? existing.paymentMethod ?? undefined,
     referenceNumber: input.referenceNumber ?? existing.referenceNumber ?? undefined,
     tags: input.tags ?? (existing.tags ? JSON.parse(existing.tags) : []),
