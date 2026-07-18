@@ -2,8 +2,7 @@ import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { FiHome, FiCreditCard, FiList, FiPlusCircle, FiLogOut, FiPieChart, FiSettings, FiSearch } from 'react-icons/fi';
 import { useAuth } from '@/context/AuthContext';
 import toast from 'react-hot-toast';
-import vyntraLogo from '@/assets/vyntra_logo.png';
-import vyntraWordmark from '@/assets/vyntra_wordmark.png';
+import { Logo } from '@/components/ui';
 
 function UserAvatar({ name }: { name: string }) {
   const initials = name
@@ -27,11 +26,10 @@ export function AppShell() {
   return (
     <div className="min-h-screen bg-background text-on-surface pb-32">
       {/* TopAppBar */}
-      <header className="fixed top-0 left-0 right-0 h-20 bg-surface/55 backdrop-blur-md shadow-[0_0_30px_rgba(196,192,255,0.15)] z-40 border-b border-white/10">
-        <div className="flex justify-between items-center px-6 max-w-5xl mx-auto h-full w-full">
-          <div className="flex items-center gap-3 cursor-pointer select-none animate-fade-in" onClick={() => navigate('/')}>
-            <img src={vyntraLogo} alt="Vyntra Logo" className="h-10 w-auto object-contain hover:scale-105 transition-transform drop-shadow-[0_0_10px_rgba(255,255,255,0.1)]" />
-            <img src={vyntraWordmark} alt="Vyntra" className="h-7 w-auto object-contain drop-shadow-[0_0_10px_rgba(255,255,255,0.1)]" />
+      <header className="fixed top-0 left-0 right-0 h-[72px] bg-surface/55 backdrop-blur-md shadow-[0_0_30px_rgba(196,192,255,0.15)] z-40 border-b border-white/10">
+        <div className="flex justify-between items-center pl-[28px] pr-6 max-w-5xl mx-auto h-full w-full">
+          <div className="cursor-pointer select-none animate-fade-in" onClick={() => navigate('/')}>
+            <Logo variant="navbar" />
           </div>
           
           <div className="flex items-center gap-4">
@@ -60,7 +58,7 @@ export function AppShell() {
       </header>
 
       {/* Main Content Area */}
-      <main className="pt-28 px-4 max-w-5xl mx-auto">
+      <main className="pt-[104px] px-4 max-w-5xl mx-auto">
         <Outlet />
       </main>
 

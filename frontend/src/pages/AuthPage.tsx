@@ -3,8 +3,7 @@ import { FiUser, FiMail, FiLock, FiEye, FiEyeOff, FiAlertCircle, FiArrowRight } 
 import { useAuth } from '@/context/AuthContext';
 import { ForgotPasswordPage } from './ForgotPasswordPage';
 import toast from 'react-hot-toast';
-import vyntraLogo from '@/assets/vyntra_logo.png';
-import vyntraWordmark from '@/assets/vyntra_wordmark.png';
+import { Logo } from '@/components/ui';
 
 type Mode = 'login' | 'register' | 'forgot';
 
@@ -108,38 +107,34 @@ export function AuthPage() {
         <div className="glass-panel rounded-[32px] p-8 md:p-10 flex flex-col gap-6 relative overflow-hidden border border-white/10 shadow-[0_0_40px_rgba(196,192,255,0.05)]">
           <div className="absolute -top-20 -right-20 w-40 h-40 bg-primary/10 rounded-full blur-[40px] pointer-events-none"></div>
           
-          {/* Header */}
-          <div className="flex flex-col items-center gap-2 text-center">
-            {/* Logo Icon (No background, transparent & larger) */}
-            <img src={vyntraLogo} alt="Vyntra Logo" className="h-24 w-auto object-contain select-none mb-3 drop-shadow-[0_0_15px_rgba(255,255,255,0.15)]" />
+          {/* Header & Navigation */}
+          <div className="flex flex-col items-center">
+            <Logo variant="auth" />
             
-            {/* Wordmark Logo */}
-            <img src={vyntraWordmark} alt="Vyntra" className="h-8 w-auto object-contain select-none drop-shadow-[0_0_15px_rgba(255,255,255,0.15)]" />
-            
-            <h2 className="text-xl font-bold text-white mt-1">
+            <h2 className="text-xl font-bold text-white mt-[40px] text-center leading-tight">
               {isLogin ? 'Welcome back' : 'Create your account'}
             </h2>
-            <p className="text-sm text-on-surface-variant font-medium">
+            <p className="text-sm text-on-surface-variant font-medium mt-[12px] text-center">
               {isLogin ? 'Sign in to manage your financial ecosystem.' : 'Get started with your premium account.'}
             </p>
-          </div>
-
-          {/* Tab switcher */}
-          <div className="flex gap-1 bg-surface-container rounded-full p-1 border border-white/5">
-            {(['login', 'register'] as const).map((m) => (
-              <button
-                key={m}
-                type="button"
-                onClick={() => { setMode(m); setError(''); }}
-                className={`flex-1 py-2 rounded-full text-xs font-semibold transition-all duration-200 ${
-                  mode === m
-                    ? 'bg-primary text-on-primary shadow-[0_0_12px_rgba(196,192,255,0.4)]'
-                    : 'text-on-surface-variant hover:text-white'
-                }`}
-              >
-                {m === 'login' ? 'Sign in' : 'Create account'}
-              </button>
-            ))}
+            
+            {/* Tab switcher */}
+            <div className="flex gap-1 bg-surface-container rounded-full p-1 border border-white/5 w-full mt-[32px]">
+              {(['login', 'register'] as const).map((m) => (
+                <button
+                  key={m}
+                  type="button"
+                  onClick={() => { setMode(m); setError(''); }}
+                  className={`flex-1 py-2 rounded-full text-xs font-semibold transition-all duration-200 ${
+                    mode === m
+                      ? 'bg-primary text-on-primary shadow-[0_0_12px_rgba(196,192,255,0.4)]'
+                      : 'text-on-surface-variant hover:text-white'
+                  }`}
+                >
+                  {m === 'login' ? 'Sign in' : 'Create account'}
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* Error */}
