@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { FiUser, FiMail, FiLock, FiEye, FiEyeOff, FiAlertCircle, FiArrowRight } from 'react-icons/fi';
 import { useAuth } from '@/context/AuthContext';
 import { ForgotPasswordPage } from './ForgotPasswordPage';
-import logoImg from '@/assets/logo.jpg';
 import toast from 'react-hot-toast';
 
 type Mode = 'login' | 'register' | 'forgot';
@@ -16,19 +15,13 @@ function GoogleButton() {
     <button
       type="button"
       onClick={handleGoogleLogin}
-      className="w-full flex items-center justify-center gap-3 rounded-xl border border-border bg-surface-elevated px-4 py-3 text-sm font-medium text-text-primary hover:bg-surface transition-colors duration-150"
+      className="w-full py-3.5 rounded-full border border-white/10 bg-white/[0.03] hover:bg-white/[0.08] transition-all active:scale-95 text-sm font-semibold text-white flex justify-center items-center gap-3 shadow-[0_0_15px_rgba(196,192,255,0.05)]"
     >
-      {/* Google SVG logo */}
-      <svg width="18" height="18" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12
-          c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4
-          C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z" fill="#FFC107"/>
-        <path d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039
-          l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z" fill="#FF3D00"/>
-        <path d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36
-          c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z" fill="#4CAF50"/>
-        <path d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571
-          c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z" fill="#1976D2"/>
+      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"></path>
+        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"></path>
+        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"></path>
+        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"></path>
       </svg>
       Continue with Google
     </button>
@@ -37,10 +30,10 @@ function GoogleButton() {
 
 function Divider() {
   return (
-    <div className="flex items-center gap-3 my-5">
-      <div className="flex-1 h-px bg-border" />
-      <span className="text-text-muted text-xs">or</span>
-      <div className="flex-1 h-px bg-border" />
+    <div className="flex items-center gap-4 my-6">
+      <div className="flex-1 h-px bg-white/10"></div>
+      <span className="text-[10px] text-on-surface-variant font-bold uppercase tracking-widest">Or</span>
+      <div className="flex-1 h-px bg-white/10"></div>
     </div>
   );
 }
@@ -91,47 +84,50 @@ export function AuthPage() {
     }
   };
 
-  // Show forgot password as an inline view
   if (mode === 'forgot') {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background p-4">
-        <div className="pointer-events-none fixed inset-0 overflow-hidden">
-          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] rounded-full bg-primary/10 blur-[140px]" />
-          <div className="absolute bottom-1/4 right-1/4 w-64 h-64 rounded-full bg-violet-500/8 blur-[100px]" />
+      <div className="min-h-screen flex items-center justify-center bg-background p-4 relative overflow-hidden">
+        <div className="fixed top-[-10%] left-[-10%] w-[45%] h-[45%] rounded-full bg-primary-container/10 blur-[130px] pointer-events-none"></div>
+        <div className="fixed bottom-[-10%] right-[-10%] w-[45%] h-[45%] rounded-full bg-tertiary-container/10 blur-[130px] pointer-events-none"></div>
+        <div className="relative z-10 w-full max-w-md">
+          <ForgotPasswordPage onBack={() => setMode('login')} />
         </div>
-        <ForgotPasswordPage onBack={() => setMode('login')} />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4">
-      {/* Background glows */}
-      <div className="pointer-events-none fixed inset-0 overflow-hidden">
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] rounded-full bg-primary/10 blur-[140px]" />
-        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 rounded-full bg-violet-500/8 blur-[100px]" />
-      </div>
+    <div className="min-h-screen flex items-center justify-center bg-background p-4 relative overflow-hidden antialiased">
+      {/* Ambient Light Orbs */}
+      <div className="fixed top-[-10%] left-[-10%] w-[45%] h-[45%] rounded-full bg-primary-container/15 blur-[130px] pointer-events-none"></div>
+      <div className="fixed bottom-[-10%] right-[-10%] w-[45%] h-[45%] rounded-full bg-tertiary-container/15 blur-[130px] pointer-events-none"></div>
 
-      <div className="relative w-full max-w-sm">
-        {/* Logo */}
-        <div className="text-center mb-8">
-          <img src={logoImg} alt="Expenzo Logo" className="mx-auto h-16 w-16 rounded-2xl object-cover border-2 border-primary/20 shadow-xl shadow-primary/20 mb-3" />
-          <h1 className="text-2xl font-bold text-text-primary">Expenzo</h1>
-          <p className="text-text-muted text-sm mt-1">Your private on-device money tracker</p>
-        </div>
+      <main className="w-full max-w-md relative z-10">
+        <div className="glass-panel rounded-[32px] p-8 md:p-10 flex flex-col gap-6 relative overflow-hidden border border-white/10 shadow-[0_0_40px_rgba(196,192,255,0.05)]">
+          <div className="absolute -top-20 -right-20 w-40 h-40 bg-primary/10 rounded-full blur-[40px] pointer-events-none"></div>
+          
+          {/* Header */}
+          <div className="flex flex-col items-center gap-2 text-center">
+            <h1 className="text-4xl font-bold tracking-tight text-primary">Expenzo</h1>
+            <h2 className="text-xl font-bold text-white mt-1">
+              {isLogin ? 'Welcome back' : 'Create your account'}
+            </h2>
+            <p className="text-sm text-on-surface-variant font-medium">
+              {isLogin ? 'Sign in to manage your financial ecosystem.' : 'Get started with your premium account.'}
+            </p>
+          </div>
 
-        {/* Card */}
-        <div className="rounded-2xl border border-border bg-surface/80 backdrop-blur-xl p-7 shadow-2xl">
           {/* Tab switcher */}
-          <div className="flex gap-1 bg-surface-elevated rounded-xl p-1 mb-6">
+          <div className="flex gap-1 bg-surface-container rounded-full p-1 border border-white/5">
             {(['login', 'register'] as const).map((m) => (
               <button
                 key={m}
+                type="button"
                 onClick={() => { setMode(m); setError(''); }}
-                className={`flex-1 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                className={`flex-1 py-2 rounded-full text-xs font-semibold transition-all duration-200 ${
                   mode === m
-                    ? 'bg-surface text-text-primary shadow-sm'
-                    : 'text-text-secondary hover:text-text-primary'
+                    ? 'bg-primary text-on-primary shadow-[0_0_12px_rgba(196,192,255,0.4)]'
+                    : 'text-on-surface-variant hover:text-white'
                 }`}
               >
                 {m === 'login' ? 'Sign in' : 'Create account'}
@@ -139,26 +135,22 @@ export function AuthPage() {
             ))}
           </div>
 
-          {/* Google Button */}
-          <GoogleButton />
-
-          <Divider />
-
           {/* Error */}
           {error && (
-            <div className="flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-400 mb-4">
+            <div className="flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-400">
               <FiAlertCircle size={15} className="mt-0.5 flex-shrink-0" />
               <span>{error}</span>
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4" noValidate>
             {/* Name (register only) */}
             {!isLogin && (
-              <div className="space-y-1.5">
-                <label htmlFor="auth-name" className="text-sm font-medium text-text-secondary">Full name</label>
+              <div className="space-y-1">
+                <label htmlFor="auth-name" className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider block ml-2">Full name</label>
                 <div className="relative">
-                  <FiUser size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted" />
+                  <FiUser size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant" />
                   <input
                     id="auth-name"
                     type="text"
@@ -166,58 +158,58 @@ export function AuthPage() {
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Nevil Patel"
                     autoComplete="name"
-                    className="w-full rounded-xl border border-border bg-surface-elevated pl-10 pr-4 py-3 text-sm text-text-primary placeholder-text-muted outline-none transition-all focus:border-primary focus:ring-1 focus:ring-primary/30"
+                    className="glass-input w-full rounded-full py-3.5 pl-12 pr-4 text-sm text-on-surface placeholder:text-on-surface-variant/50 focus:ring-0 focus:border-tertiary transition-all"
                   />
                 </div>
               </div>
             )}
 
             {/* Email */}
-            <div className="space-y-1.5">
-              <label htmlFor="auth-email" className="text-sm font-medium text-text-secondary">Email</label>
+            <div className="space-y-1">
+              <label htmlFor="auth-email" className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider block ml-2">Email address</label>
               <div className="relative">
-                <FiMail size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted" />
+                <FiMail size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant" />
                 <input
                   id="auth-email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="you@example.com"
+                  placeholder="name@company.com"
                   autoComplete="email"
-                  className="w-full rounded-xl border border-border bg-surface-elevated pl-10 pr-4 py-3 text-sm text-text-primary placeholder-text-muted outline-none transition-all focus:border-primary focus:ring-1 focus:ring-primary/30"
+                  className="glass-input w-full rounded-full py-3.5 pl-12 pr-4 text-sm text-on-surface placeholder:text-on-surface-variant/50 focus:ring-0 focus:border-tertiary transition-all"
                 />
               </div>
             </div>
 
             {/* Password */}
-            <div className="space-y-1.5">
-              <div className="flex items-center justify-between">
-                <label htmlFor="auth-password" className="text-sm font-medium text-text-secondary">Password</label>
+            <div className="space-y-1">
+              <div className="flex justify-between items-center ml-2 mr-2">
+                <label htmlFor="auth-password" className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider block">Password</label>
                 {isLogin && (
                   <button
                     type="button"
                     onClick={() => { setMode('forgot'); setError(''); }}
-                    className="text-xs text-primary hover:text-primary/80 transition-colors"
+                    className="text-xs text-primary hover:text-white transition-colors"
                   >
-                    Forgot password?
+                    Forgot Password?
                   </button>
                 )}
               </div>
               <div className="relative">
-                <FiLock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted" />
+                <FiLock size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant" />
                 <input
                   id="auth-password"
                   type={showPw ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder={isLogin ? '••••••••' : 'At least 8 characters'}
+                  placeholder="••••••••"
                   autoComplete={isLogin ? 'current-password' : 'new-password'}
-                  className="w-full rounded-xl border border-border bg-surface-elevated pl-10 pr-12 py-3 text-sm text-text-primary placeholder-text-muted outline-none transition-all focus:border-primary focus:ring-1 focus:ring-primary/30"
+                  className="glass-input w-full rounded-full py-3.5 pl-12 pr-12 text-sm text-on-surface placeholder:text-on-surface-variant/50 focus:ring-0 focus:border-tertiary transition-all"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPw(!showPw)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-secondary"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-white"
                 >
                   {showPw ? <FiEyeOff size={16} /> : <FiEye size={16} />}
                 </button>
@@ -226,10 +218,10 @@ export function AuthPage() {
 
             {/* Confirm Password (register only) */}
             {!isLogin && (
-              <div className="space-y-1.5">
-                <label htmlFor="auth-confirm" className="text-sm font-medium text-text-secondary">Confirm password</label>
+              <div className="space-y-1">
+                <label htmlFor="auth-confirm" className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider block ml-2">Confirm password</label>
                 <div className="relative">
-                  <FiLock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted" />
+                  <FiLock size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant" />
                   <input
                     id="auth-confirm"
                     type={showPw ? 'text' : 'password'}
@@ -237,7 +229,7 @@ export function AuthPage() {
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     placeholder="Re-enter password"
                     autoComplete="new-password"
-                    className="w-full rounded-xl border border-border bg-surface-elevated pl-10 pr-4 py-3 text-sm text-text-primary placeholder-text-muted outline-none transition-all focus:border-primary focus:ring-1 focus:ring-primary/30"
+                    className="glass-input w-full rounded-full py-3.5 pl-12 pr-4 text-sm text-on-surface placeholder:text-on-surface-variant/50 focus:ring-0 focus:border-tertiary transition-all"
                   />
                 </div>
               </div>
@@ -247,24 +239,29 @@ export function AuthPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-3 rounded-xl gradient-primary text-white font-semibold text-sm shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all duration-200 disabled:opacity-60 flex items-center justify-center gap-2"
+              className="w-full bg-primary-container hover:bg-primary text-white rounded-full py-3.5 font-semibold text-sm mt-3 flex justify-center items-center gap-2 hover:scale-105 active:scale-95 transition-all shadow-[0_0_20px_rgba(135,129,255,0.4)] disabled:opacity-60"
             >
               {isLoading ? (
                 <span className="h-5 w-5 rounded-full border-2 border-white border-t-transparent animate-spin" />
               ) : (
                 <>
-                  {isLogin ? 'Sign in' : 'Create account'}
-                  <FiArrowRight size={16} />
+                  <span>{isLogin ? 'Sign In' : 'Create Account'}</span>
+                  <FiArrowRight size={16} className="mt-0.5" />
                 </>
               )}
             </button>
           </form>
+
+          <Divider />
+
+          {/* Social Auth */}
+          <GoogleButton />
         </div>
 
-        <p className="text-center text-text-muted text-xs mt-6">
+        <p className="text-center text-on-surface-variant text-xs mt-6">
           Your data stays on this device. Private by design.
         </p>
-      </div>
+      </main>
     </div>
   );
 }
