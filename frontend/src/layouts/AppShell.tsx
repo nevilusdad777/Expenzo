@@ -1,5 +1,5 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { FiHome, FiCreditCard, FiList, FiPlusCircle, FiLogOut, FiPieChart, FiSettings, FiSearch, FiBell } from 'react-icons/fi';
+import { FiHome, FiCreditCard, FiList, FiPlusCircle, FiLogOut, FiPieChart, FiSettings, FiSearch } from 'react-icons/fi';
 import { useAuth } from '@/context/AuthContext';
 import toast from 'react-hot-toast';
 
@@ -11,7 +11,7 @@ function UserAvatar({ name }: { name: string }) {
     .join('')
     .toUpperCase();
   return (
-    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full gradient-primary text-sm font-bold text-white shadow-md shadow-primary/30 border border-white/10">
+    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-container text-xs font-bold text-white shadow-inner border border-white/10">
       {initials}
     </div>
   );
@@ -20,19 +20,6 @@ function UserAvatar({ name }: { name: string }) {
 export function AppShell() {
   const { logout, user } = useAuth();
   const navigate = useNavigate();
-
-  const handleNotificationsClick = () => {
-    toast('Your financial ecosystem is fully secure. No new alerts.', {
-      icon: '🔔',
-      style: {
-        background: 'rgba(19, 19, 21, 0.9)',
-        color: '#fff',
-        border: '1px solid rgba(255, 255, 255, 0.08)',
-        borderRadius: '1rem',
-        fontSize: '13px',
-      },
-    });
-  };
 
   return (
     <div className="min-h-screen bg-background text-on-surface pb-32">
@@ -47,12 +34,6 @@ export function AppShell() {
               className="text-on-surface-variant hover:bg-white/5 hover:text-primary transition-colors active:scale-95 duration-200 p-2 rounded-full"
             >
               <FiSearch size={20} />
-            </button>
-            <button
-              onClick={handleNotificationsClick}
-              className="text-on-surface-variant hover:bg-white/5 hover:text-primary transition-colors active:scale-95 duration-200 p-2 rounded-full"
-            >
-              <FiBell size={20} />
             </button>
             
             {user && (

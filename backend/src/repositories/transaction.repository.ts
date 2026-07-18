@@ -27,9 +27,9 @@ export function buildTransactionWhere(
   if (query.search) {
     conditions.push({
       OR: [
-        { description: { contains: query.search } },
-        { referenceNumber: { contains: query.search } },
-        { paymentMethod: { contains: query.search } },
+        { description: { contains: query.search, mode: 'insensitive' } },
+        { referenceNumber: { contains: query.search, mode: 'insensitive' } },
+        { paymentMethod: { contains: query.search, mode: 'insensitive' } },
       ],
     });
   }
