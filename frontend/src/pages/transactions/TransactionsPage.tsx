@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FiEdit2, FiTrash2, FiPlus, FiArrowUp, FiArrowDown } from 'react-icons/fi';
+import { FiEdit2, FiTrash2, FiPlus } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import { useAccounts } from '@/hooks/queries/useAccounts';
 import { useCategories } from '@/hooks/queries/useCategories';
@@ -19,7 +19,6 @@ function TransactionRow({
   onDelete: () => void;
   deleting: boolean;
 }) {
-  const navigate = useNavigate();
   const title = tx.description || tx.category?.name || tx.account.name;
   const subtitle =
     tx.type === 'TRANSFER' && tx.toAccount

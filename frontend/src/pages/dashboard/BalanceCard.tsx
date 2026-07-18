@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { FiArrowUp, FiArrowDown } from 'react-icons/fi';
+import { FiArrowUp } from 'react-icons/fi';
 import { formatCurrency } from '@/utils/formatters';
 
 interface BalanceCardProps {

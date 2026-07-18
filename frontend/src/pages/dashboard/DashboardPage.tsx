@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom';
 import { FiArrowDownCircle, FiArrowUpCircle } from 'react-icons/fi';
 import { useDashboardSummary, useMonthlyTrend } from '@/hooks/queries/useDashboard';
 import { BalanceCard } from './BalanceCard';
@@ -7,10 +6,8 @@ import { RecentTransactionsList } from './RecentTransactionsList';
 import { CategoryPieChart } from './CategoryPieChart';
 import { MonthlyTrendChart } from './MonthlyTrendChart';
 import { AccountBalancesList } from './AccountBalancesList';
-import { Button } from '@/components/ui';
 
 export function DashboardPage() {
-  const navigate = useNavigate();
   const currentYear = new Date().getFullYear();
   const { data: summary, isLoading, isError } = useDashboardSummary();
   const { data: trend } = useMonthlyTrend(currentYear);
