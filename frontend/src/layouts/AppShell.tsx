@@ -1,6 +1,7 @@
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { FiHome, FiCreditCard, FiList, FiPlusCircle, FiLogOut, FiPieChart, FiSettings, FiSearch, FiBell } from 'react-icons/fi';
 import { useAuth } from '@/context/AuthContext';
+import toast from 'react-hot-toast';
 
 function UserAvatar({ name }: { name: string }) {
   const initials = name
@@ -18,6 +19,20 @@ function UserAvatar({ name }: { name: string }) {
 
 export function AppShell() {
   const { logout, user } = useAuth();
+  const navigate = useNavigate();
+
+  const handleNotificationsClick = () => {
+    toast('Your financial ecosystem is fully secure. No new alerts.', {
+      icon: '🔔',
+      style: {
+        background: 'rgba(19, 19, 21, 0.9)',
+        color: '#fff',
+        border: '1px solid rgba(255, 255, 255, 0.08)',
+        borderRadius: '1rem',
+        fontSize: '13px',
+      },
+    });
+  };
 
   return (
     <div className="min-h-screen bg-background text-on-surface pb-32">
@@ -27,10 +42,16 @@ export function AppShell() {
           <div className="text-2xl font-bold tracking-tight text-primary">Expenzo</div>
           
           <div className="flex items-center gap-4">
-            <button className="text-on-surface-variant hover:bg-white/5 hover:text-primary transition-colors active:scale-95 duration-200 p-2 rounded-full">
+            <button
+              onClick={() => navigate('/transactions')}
+              className="text-on-surface-variant hover:bg-white/5 hover:text-primary transition-colors active:scale-95 duration-200 p-2 rounded-full"
+            >
               <FiSearch size={20} />
             </button>
-            <button className="text-on-surface-variant hover:bg-white/5 hover:text-primary transition-colors active:scale-95 duration-200 p-2 rounded-full">
+            <button
+              onClick={handleNotificationsClick}
+              className="text-on-surface-variant hover:bg-white/5 hover:text-primary transition-colors active:scale-95 duration-200 p-2 rounded-full"
+            >
               <FiBell size={20} />
             </button>
             
