@@ -109,16 +109,12 @@ export function AuthPage() {
           <div className="absolute -top-20 -right-20 w-40 h-40 bg-primary/10 rounded-full blur-[40px] pointer-events-none"></div>
           
           {/* Header */}
-          <div className="flex flex-col items-center gap-3 text-center">
-            {/* Logo Emblem (iOS Squircle Icon Style) */}
-            <div className="w-16 h-16 rounded-2xl bg-white p-2.5 flex items-center justify-center shadow-lg border border-white/20 select-none">
-              <img src={vyntraLogo} alt="Vyntra Logo" className="w-full h-full object-contain" />
-            </div>
+          <div className="flex flex-col items-center gap-2 text-center">
+            {/* Logo Icon (No background, transparent & larger) */}
+            <img src={vyntraLogo} alt="Vyntra Logo" className="h-28 w-auto object-contain select-none mb-2" />
             
             {/* Wordmark Logo */}
-            <div className="h-8 select-none flex items-center justify-center mt-1">
-              <img src={vyntraWordmark} alt="Vyntra" className="h-full w-auto object-contain" />
-            </div>
+            <img src={vyntraWordmark} alt="Vyntra" className="h-8 w-auto object-contain select-none" />
             
             <h2 className="text-xl font-bold text-white mt-1">
               {isLogin ? 'Welcome back' : 'Create your account'}
