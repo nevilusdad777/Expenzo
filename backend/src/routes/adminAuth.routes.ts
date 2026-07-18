@@ -11,15 +11,19 @@ router.post('/admin/auth/logout', adminAuthController.adminLogout);
 router.get('/admin/auth/me', optionalAdminAuth, adminAuthController.adminMe);
 
 // ─── Admin Protected Routes ───────────────────────────────────────────────────
-router.use(adminGuard);
-router.post('/admin/auth/change-password', adminAuthController.adminChangePassword);
+const adminProtected = Router();
+adminProtected.use(adminGuard);
+
+adminProtected.post('/auth/change-password', adminAuthController.adminChangePassword);
 
 // User management
-router.get('/admin/stats', adminController.getStats);
-router.get('/admin/users', adminController.listUsers);
-router.get('/admin/users/:id', adminController.getUserDetail);
-router.patch('/admin/users/:id', adminController.updateUser);
-router.post('/admin/users/:id/reset-password', adminController.resetUserPassword);
-router.delete('/admin/users/:id', adminController.deleteUser);
+adminProtected.get('/stats', adminController.getStats);
+adminProtected.get('/users', adminController.listUsers);
+adminProtected.get('/users/:id', adminController.getUserDetail);
+adminProtected.patch('/users/:id', adminController.updateUser);
+adminProtected.post('/users/:id/reset-password', adminController.resetUserPassword);
+adminProtected.delete('/users/:id', adminController.deleteUser);
+
+router.use('/admin', adminProtected);
 
 export default router;
