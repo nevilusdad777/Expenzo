@@ -30,6 +30,8 @@ export function buildTransactionWhere(
         { description: { contains: query.search, mode: 'insensitive' } },
         { referenceNumber: { contains: query.search, mode: 'insensitive' } },
         { paymentMethod: { contains: query.search, mode: 'insensitive' } },
+        { category: { name: { contains: query.search, mode: 'insensitive' } } },
+        { account: { name: { contains: query.search, mode: 'insensitive' } } },
       ],
     });
   }

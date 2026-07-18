@@ -111,10 +111,10 @@ export function AuthPage() {
           {/* Header */}
           <div className="flex flex-col items-center gap-2 text-center">
             {/* Logo Icon (No background, transparent & larger) */}
-            <img src={vyntraLogo} alt="Vyntra Logo" className="h-28 w-auto object-contain select-none mb-2" />
+            <img src={vyntraLogo} alt="Vyntra Logo" className="h-24 w-auto object-contain select-none mb-3 drop-shadow-[0_0_15px_rgba(255,255,255,0.15)]" />
             
             {/* Wordmark Logo */}
-            <img src={vyntraWordmark} alt="Vyntra" className="h-8 w-auto object-contain select-none" />
+            <img src={vyntraWordmark} alt="Vyntra" className="h-8 w-auto object-contain select-none drop-shadow-[0_0_15px_rgba(255,255,255,0.15)]" />
             
             <h2 className="text-xl font-bold text-white mt-1">
               {isLogin ? 'Welcome back' : 'Create your account'}

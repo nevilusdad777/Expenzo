@@ -53,6 +53,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       window.history.replaceState({}, document.title, window.location.pathname);
     }
 
+    const handleUnauthorized = () => {
+      setUser(null);
+    };
+    window.addEventListener('auth_unauthorized', handleUnauthorized);
+
     apiClient
       .get<{ success: boolean; data: { authenticated: boolean; user: AuthUser | null } }>(
         '/api/auth/me'
@@ -64,6 +69,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       })
       .catch(() => {})
       .finally(() => setIsLoading(false));
+
+    return () => {
+      window.removeEventListener('auth_unauthorized', handleUnauthorized);
+    };
   }, []);
 
   const login = useCallback(async (email: string, password: string) => {

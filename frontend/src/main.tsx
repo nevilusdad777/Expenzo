@@ -6,6 +6,24 @@ import { Toaster } from 'react-hot-toast';
 import App from './App';
 import './index.css';
 
+// Unregister broken service workers
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(registrations => {
+    for (const registration of registrations) {
+      registration.unregister();
+    }
+  });
+}
+
+// Bust any old broken service worker caches
+if ('caches' in window) {
+	caches.keys().then((names) => {
+		for (const name of names) {
+			caches.delete(name);
+		}
+	});
+}
+
 const queryClient = new QueryClient({
 	defaultOptions: {
 		queries: {
