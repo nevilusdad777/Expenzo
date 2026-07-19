@@ -58,7 +58,18 @@ export function AuthPage() {
     if (!password) return 'Password is required';
     if (!isLogin) {
       if (!name.trim()) return 'Name is required';
-      if (password.length < 8) return 'Password must be at least 8 characters';
+      
+      const requirements = [];
+      if (password.length < 8) requirements.push('at least 8 characters');
+      if (!/[A-Z]/.test(password)) requirements.push('an uppercase letter');
+      if (!/[a-z]/.test(password)) requirements.push('a lowercase letter');
+      if (!/[0-9]/.test(password)) requirements.push('a number');
+      if (!/[^A-Za-z0-9]/.test(password)) requirements.push('a special character');
+      
+      if (requirements.length > 0) {
+        return `Password must contain: ${requirements.join(', ')}`;
+      }
+      
       if (password !== confirmPassword) return 'Passwords do not match';
     }
     return '';

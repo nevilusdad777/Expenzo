@@ -13,6 +13,7 @@ model User {
   email         String    @unique
   passwordHash  String?
   name          String
+  avatarUrl     String?
   googleId      String?   @unique
   emailVerified Boolean   @default(false)
   role          String    @default("USER")
@@ -152,7 +153,9 @@ model Transaction {
   updatedAt       DateTime        @updatedAt
 
   @@index([userId])
-  @@index([date, type])
+  @@index([userId, date])
+  @@index([userId, date, type])
+  @@index([userId, type])
   @@index([accountId])
   @@index([categoryId])
   @@index([referenceNumber])

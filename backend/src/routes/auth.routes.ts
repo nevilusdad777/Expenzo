@@ -7,6 +7,8 @@ import {
   registerSchema,
   loginSchema,
   changePasswordSchema,
+  passwordValidationSchema,
+  updateProfileSchema,
 } from '../validators/auth.validator';
 import { z } from 'zod';
 
@@ -47,7 +49,7 @@ router.post(
   validate(
     z.object({
       token: z.string().min(1),
-      newPassword: z.string().min(8, 'Password must be at least 8 characters'),
+      newPassword: passwordValidationSchema,
     })
   ),
   authController.resetPassword
@@ -55,6 +57,9 @@ router.post(
 
 // ─── Password Change ──────────────────────────────────────────────────────────
 router.post('/auth/change-password', authGuard, validate(changePasswordSchema), authController.changePassword);
+
+// ─── Profile Update ───────────────────────────────────────────────────────────
+router.patch('/auth/profile', authGuard, validate(updateProfileSchema), authController.updateProfile);
 
 // ─── Settings ─────────────────────────────────────────────────────────────────
 router.get('/auth/settings/auto-lock', authGuard, authController.getAutoLockSettings);

@@ -20,7 +20,7 @@ export function CategoryPieChart({ data }: CategoryPieChartProps) {
 
   return (
     <div className="glass-panel rounded-xl p-4 flex flex-col h-full border border-white/10 transition-all hover:shadow-[0_0_20px_rgba(196,192,255,0.08)]">
-      <h3 className="text-base font-bold text-white mb-4">Expense Categories</h3>
+      <h3 className="text-base font-bold text-white mb-4">Expense Categories (This Month)</h3>
       
       <div className="h-56 relative flex items-center justify-center">
         <ResponsiveContainer width="100%" height="100%">
@@ -29,8 +29,8 @@ export function CategoryPieChart({ data }: CategoryPieChartProps) {
               data={data}
               dataKey="amount"
               nameKey="name"
-              innerRadius={50}
-              outerRadius={80}
+              innerRadius={55}
+              outerRadius={85}
               paddingAngle={3}
               stroke="rgba(19, 19, 21, 0.5)"
               strokeWidth={2}
@@ -56,9 +56,11 @@ export function CategoryPieChart({ data }: CategoryPieChartProps) {
         </ResponsiveContainer>
 
         {/* Center Text inside Donut Chart */}
-        <div className="absolute flex flex-col items-center justify-center">
-          <span className="text-[10px] uppercase tracking-wider text-on-surface-variant font-medium">Top Category</span>
-          <span className="text-base font-bold text-white mt-0.5">{data[0]?.name || 'None'}</span>
+        <div className="absolute flex flex-col items-center justify-center text-center p-2 w-[100px] pointer-events-none">
+          <span className="text-[9px] uppercase tracking-wider text-on-surface-variant font-medium">Top Category</span>
+          <span className="text-xs sm:text-sm font-bold text-white mt-0.5 break-words line-clamp-2 leading-tight w-full">
+            {data[0]?.name || 'None'}
+          </span>
         </div>
       </div>
 

@@ -1,46 +1,53 @@
-import vyntraLogo from '@/assets/vyntra_logo.png';
-import vyntraWordmark from '@/assets/vyntra_wordmark.png';
+import React from 'react';
+import vyntraIcon from '../../assets/vyntra_icon.svg';
+import vyntraWordmark from '../../assets/vyntra_wordmark.svg';
 
 interface LogoProps {
-  variant?: 'navbar' | 'auth';
+  variant?: 'navbar' | 'auth' | 'custom';
+  iconHeight?: number | string;
+  wordmarkHeight?: number | string;
+  gap?: number | string;
   className?: string;
 }
 
-export function Logo({ variant = 'navbar', className = '' }: LogoProps) {
-  if (variant === 'auth') {
-    return (
-      <div className={`flex items-center gap-[12px] select-none justify-center h-[52px] md:h-[60px] lg:h-[72px] ${className}`}>
-        {/* Icon */}
-        <img
-          src={vyntraLogo}
-          alt="Vyntra Logo"
-          className="h-full w-auto object-contain shrink-0 drop-shadow-[0_0_15px_rgba(255,255,255,0.15)]"
-        />
-        {/* Wordmark */}
-        <img
-          src={vyntraWordmark}
-          alt="Vyntra"
-          className="h-[39%] w-auto object-contain shrink-0 drop-shadow-[0_0_15px_rgba(255,255,255,0.15)]"
-        />
-      </div>
-    );
+export const Logo: React.FC<LogoProps> = ({
+  variant = 'navbar',
+  iconHeight,
+  wordmarkHeight,
+  gap,
+  className = '',
+}) => {
+  let resolvedIconHeight = iconHeight ?? 36;
+  let resolvedWordmarkHeight = wordmarkHeight ?? 20;
+  let resolvedGap = gap ?? 12;
+
+  if (variant === 'navbar') {
+    resolvedIconHeight = iconHeight ?? 36;
+    resolvedWordmarkHeight = wordmarkHeight ?? 20;
+    resolvedGap = gap ?? 12;
+  } else if (variant === 'auth') {
+    resolvedIconHeight = iconHeight ?? 72;
+    resolvedWordmarkHeight = wordmarkHeight ?? 28;
+    resolvedGap = gap ?? 12;
   }
 
-  // navbar variant (horizontal layout)
   return (
-    <div className={`flex items-center gap-[12px] select-none transition-opacity duration-200 hover:opacity-85 h-[28px] md:h-[32px] lg:h-[36px] ${className}`}>
-      {/* Icon */}
+    <div
+      className={`flex items-center ${className}`}
+      style={{ gap: typeof resolvedGap === 'number' ? `${resolvedGap}px` : resolvedGap }}
+    >
       <img
-        src={vyntraLogo}
-        alt="Vyntra Logo"
-        className="h-full w-auto object-contain shrink-0 drop-shadow-[0_0_10px_rgba(255,255,255,0.1)]"
+        src={vyntraIcon}
+        alt="Vyntra Icon"
+        style={{ height: typeof resolvedIconHeight === 'number' ? `${resolvedIconHeight}px` : resolvedIconHeight, width: 'auto', objectFit: 'contain' }}
+        className="select-none"
       />
-      {/* Wordmark */}
       <img
         src={vyntraWordmark}
-        alt="Vyntra"
-        className="h-[55.5%] w-auto object-contain shrink-0 drop-shadow-[0_0_10px_rgba(255,255,255,0.1)]"
+        alt="Vyntra Wordmark"
+        style={{ height: typeof resolvedWordmarkHeight === 'number' ? `${resolvedWordmarkHeight}px` : resolvedWordmarkHeight, width: 'auto', objectFit: 'contain' }}
+        className="select-none"
       />
     </div>
   );
-}
+};

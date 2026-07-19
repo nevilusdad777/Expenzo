@@ -39,8 +39,15 @@ export function ResetPasswordPage() {
     e.preventDefault();
     setError('');
 
-    if (newPassword.length < 8) {
-      setError('Password must be at least 8 characters');
+    const requirements = [];
+    if (newPassword.length < 8) requirements.push('at least 8 characters');
+    if (!/[A-Z]/.test(newPassword)) requirements.push('an uppercase letter');
+    if (!/[a-z]/.test(newPassword)) requirements.push('a lowercase letter');
+    if (!/[0-9]/.test(newPassword)) requirements.push('a number');
+    if (!/[^A-Za-z0-9]/.test(newPassword)) requirements.push('a special character');
+
+    if (requirements.length > 0) {
+      setError(`Password must contain: ${requirements.join(', ')}`);
       return;
     }
     if (newPassword !== confirmPassword) {

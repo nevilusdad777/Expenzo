@@ -15,13 +15,13 @@ export function SummaryCard({ label, amount, icon: Icon, variant }: SummaryCardP
   const hoverClass = isSuccess ? 'hover:border-tertiary/30' : 'hover:border-error/30';
 
   return (
-    <div className={`glass-panel rounded-lg p-4 flex flex-col gap-3 transition-all hover:scale-105 duration-200 border ${hoverClass}`}>
-      <div className={`w-8 h-8 rounded-full border flex items-center justify-center ${bgClass} ${colorClass}`}>
-        <Icon size={16} />
+    <div className={`glass-panel rounded-lg p-3 sm:p-4 flex flex-col gap-2 sm:gap-3 transition-all hover:scale-105 duration-200 border ${hoverClass}`}>
+      <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full border flex items-center justify-center ${bgClass} ${colorClass}`}>
+        <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
       </div>
       <div>
-        <p className="text-xs text-on-surface-variant font-medium">{label}</p>
-        <p className="text-xl font-bold text-white mt-1">{formatCurrency(amount)}</p>
+        <p className="text-[10px] sm:text-xs text-on-surface-variant font-medium truncate" title={label}>{label}</p>
+        <p className="text-base sm:text-xl font-bold text-white mt-0.5 sm:mt-1">{formatCurrency(amount)}</p>
       </div>
     </div>
   );

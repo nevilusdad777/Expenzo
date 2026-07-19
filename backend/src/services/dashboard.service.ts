@@ -14,32 +14,34 @@ export async function getDashboardSummary(userId: string, query: DashboardQuery)
   const year = query.year ?? now.getUTCFullYear();
   const { start, end } = monthBounds(month, year);
 
-  const [monthlySums, totalBalanceAgg, recentTransactions, highestExpense, highestIncome] =
-    await Promise.all([
-      dashboardRepo.sumTransactionsByType(userId, start, end),
-      dashboardRepo.sumAllAccountBalances(userId),
-      dashboardRepo.getRecentTransactions(userId, 10),
-      dashboardRepo.getHighestTransaction(userId, 'EXPENSE', start, end),
-      dashboardRepo.getHighestTransaction(userId, 'INCOME', start, end),
-    ]);
+  // Run ALL queries in parallel — was previously 4 sequential round-trips (400–1600ms each)
+  const [
+    monthlySums,
+    allTimeSums,
+    totalBalanceAgg,
+    recentTransactions,
+    highestExpense,
+    highestIncome,
+    topExpenseCategories,
+    topIncomeCategories,
+    allCategories,
+  ] = await Promise.all([
+    dashboardRepo.sumTransactionsByType(userId, start, end),
+    dashboardRepo.sumTransactionsByType(userId, new Date(0), new Date('2100-01-01')),
+    dashboardRepo.sumAllAccountBalances(userId),
+    dashboardRepo.getRecentTransactions(userId, 10),
+    dashboardRepo.getHighestTransaction(userId, 'EXPENSE', start, end),
+    dashboardRepo.getHighestTransaction(userId, 'INCOME', start, end),
+    dashboardRepo.getTopCategoriesByAmount(userId, start, end, 'EXPENSE', 5),
+    dashboardRepo.getTopCategoriesByAmount(userId, start, end, 'INCOME', 5),
+    categoryRepo.findAllCategories(userId),
+  ]);
 
   const monthlyIncome = monthlySums.find((s) => s.type === 'INCOME')?._sum.amount ?? 0;
   const monthlyExpense = monthlySums.find((s) => s.type === 'EXPENSE')?._sum.amount ?? 0;
-
-  const allTimeSums = await dashboardRepo.sumTransactionsByType(
-    userId,
-    new Date(0),
-    new Date('2100-01-01')
-  );
   const totalIncome = allTimeSums.find((s) => s.type === 'INCOME')?._sum.amount ?? 0;
   const totalExpense = allTimeSums.find((s) => s.type === 'EXPENSE')?._sum.amount ?? 0;
 
-  const [topExpenseCategories, topIncomeCategories] = await Promise.all([
-    dashboardRepo.getTopCategoriesByAmount(userId, start, end, 'EXPENSE', 5),
-    dashboardRepo.getTopCategoriesByAmount(userId, start, end, 'INCOME', 5),
-  ]);
-
-  const allCategories = await categoryRepo.findAllCategories(userId);
   const categoryMap = new Map(allCategories.map((c) => [c.id, c]));
 
   const enrichCategoryStats = (

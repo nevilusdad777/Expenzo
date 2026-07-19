@@ -7,13 +7,34 @@ import type { Category } from '@/types/category.types';
 import type { Transaction, TransactionType } from '@/types/transaction.types';
 import { toDateInputValue } from '@/utils/dateRanges';
 import { useState } from 'react';
+import { FiInfo } from 'react-icons/fi';
 
-function flattenCategories(categories: Category[]): Array<{ id: string; label: string }> {
-  const options: Array<{ id: string; label: string }> = [];
+const OTHER_CATEGORY_NAME = 'Other';
+
+// Examples shown when user picks "Other" category
+const OTHER_EXAMPLES: Record<'INCOME' | 'EXPENSE', string[]> = {
+  INCOME: [
+    'Received money from friend',
+    'Borrowed cash repaid',
+    'Sold personal item',
+    'Cashback / reward',
+    'Found money',
+  ],
+  EXPENSE: [
+    'Lent money to friend',
+    'Gave money to family',
+    'Miscellaneous expense',
+    'Cash gift given',
+    'Unexpected cost',
+  ],
+};
+
+function flattenCategories(categories: Category[]): Array<{ id: string; label: string; name: string }> {
+  const options: Array<{ id: string; label: string; name: string }> = [];
   for (const parent of categories) {
-    options.push({ id: parent.id, label: parent.name });
+    options.push({ id: parent.id, label: parent.name, name: parent.name });
     for (const child of parent.children ?? []) {
-      options.push({ id: child.id, label: `  ${child.name}` });
+      options.push({ id: child.id, label: `  ${child.name}`, name: child.name });
     }
   }
   return options;
@@ -69,6 +90,12 @@ export function TransactionForm({
     () => flattenCategories(categories ?? []),
     [categories]
   );
+
+  // Detect if "Other" is the selected category
+  const selectedCategoryName = categoryOptions.find((c) => c.id === categoryId)?.name ?? '';
+  const isOtherSelected = selectedCategoryName === OTHER_CATEGORY_NAME;
+  const otherExamples =
+    type === 'INCOME' ? OTHER_EXAMPLES.INCOME : OTHER_EXAMPLES.EXPENSE;
 
   const tags = tagsInput
     .split(',')
@@ -212,11 +239,44 @@ export function TransactionForm({
           </div>
         )}
 
+        {/* "Other" category helper — shown when user selects Other */}
+        {isOtherSelected && type !== 'TRANSFER' && (
+          <div className="md:col-span-2">
+            <div className="rounded-xl border border-primary/20 bg-primary/5 p-3 flex flex-col gap-2">
+              <div className="flex items-center gap-2 text-primary">
+                <FiInfo size={14} className="shrink-0" />
+                <span className="text-xs font-semibold">
+                  You selected "Other" — please describe this {type === 'INCOME' ? 'income' : 'expense'} in the Description field below
+                </span>
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                <span className="text-[10px] text-on-surface-variant font-medium mr-1">Quick fill:</span>
+                {otherExamples.map((ex) => (
+                  <button
+                    key={ex}
+                    type="button"
+                    onClick={() => setDescription(ex)}
+                    className="text-[10px] px-2 py-0.5 rounded-full bg-white/5 hover:bg-primary/20 border border-white/10 hover:border-primary/30 text-on-surface-variant hover:text-primary transition-all"
+                  >
+                    {ex}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
         <Input
           label="Description *"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          placeholder="e.g., Coffee, grocery shopping..."
+          placeholder={
+            isOtherSelected
+              ? type === 'INCOME'
+                ? 'e.g. Received money from friend, sold old phone...'
+                : 'e.g. Lent money to friend, gave cash to family...'
+              : 'e.g., Coffee, grocery shopping...'
+          }
         />
 
         <Input

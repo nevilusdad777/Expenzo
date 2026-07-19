@@ -1,9 +1,39 @@
+import { prisma } from '../repositories/prismaClient';
 import * as categoryRepo from '../repositories/category.repository';
 import { CreateCategoryInput, UpdateCategoryInput } from '../validators/category.validator';
 import { AppError } from '../middleware/errorHandler';
 import { HTTP_STATUS } from '../config/constants';
 
+/**
+ * Ensures 'Other' category exists for both INCOME and EXPENSE.
+ * Runs upsert — idempotent, safe to call every time categories are fetched.
+ * This migrates existing users who registered before 'Other' was added.
+ */
+async function ensureOtherCategories(userId: string) {
+  const upsertOther = (type: 'INCOME' | 'EXPENSE') =>
+    prisma.category.upsert({
+      where: {
+        // Use a unique deterministic id so we never duplicate
+        id: `${userId}-${type.toLowerCase()}-other`,
+      },
+      update: {}, // Already exists — no change needed
+      create: {
+        id: `${userId}-${type.toLowerCase()}-other`,
+        userId,
+        name: 'Other',
+        type,
+        icon: 'more_horiz',
+        color: '#918fa1',
+        isDefault: true,
+      },
+    });
+
+  await Promise.all([upsertOther('INCOME'), upsertOther('EXPENSE')]);
+}
+
 export async function listCategories(userId: string, type?: 'INCOME' | 'EXPENSE') {
+  // Auto-provision 'Other' for existing users who didn't have it yet
+  await ensureOtherCategories(userId);
   return categoryRepo.findAllCategories(userId, type);
 }
 

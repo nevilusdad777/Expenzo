@@ -20,17 +20,8 @@ export const apiClient = axios.create({
 apiClient.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('session_token') || localStorage.getItem('admin_token');
-    console.log('[Expenzo API] Request:', config.method?.toUpperCase(), config.url, 'Has Token:', !!token);
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`;
-      if (config.headers && typeof config.headers.set === 'function') {
-        config.headers.set('Authorization', `Bearer ${token}`);
-      }
-    }
-    // Add cache buster to GET requests to bypass stuck Service Worker caches
-    if (config.method?.toLowerCase() === 'get' && config.url) {
-      const separator = config.url.includes('?') ? '&' : '?';
-      config.url = `${config.url}${separator}_cb=${Date.now()}`;
     }
     return config;
   },

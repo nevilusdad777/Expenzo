@@ -8,6 +8,7 @@ export interface AuthUser {
   emailVerified: boolean;
   hasGoogleAccount: boolean;
   role: 'USER' | 'ADMIN';
+  avatarUrl?: string | null;
 }
 
 interface AuthContextValue {
@@ -25,6 +26,7 @@ interface AuthContextValue {
   resetPassword: (token: string, newPassword: string) => Promise<void>;
   sendOTP: () => Promise<void>;
   verifyOTP: (code: string) => Promise<void>;
+  updateProfile: (name: string, email: string, avatarUrl: string | null) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -141,6 +143,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(res.data.data.user);
   }, []);
 
+  const updateProfile = useCallback(async (name: string, email: string, avatarUrl: string | null) => {
+    const res = await apiClient.patch<{ success: boolean; data: AuthUser }>('/api/auth/profile', {
+      name,
+      email,
+      avatarUrl,
+    });
+    setUser(res.data.data);
+  }, []);
+
   return (
     <AuthContext.Provider
       value={{
@@ -158,6 +169,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         resetPassword,
         sendOTP,
         verifyOTP,
+        updateProfile,
       }}
     >
       {children}

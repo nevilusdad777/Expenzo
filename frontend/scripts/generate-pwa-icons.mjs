@@ -6,23 +6,23 @@ import sharp from 'sharp';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const publicDir = path.resolve(__dirname, '../public');
 const iconsDir = path.join(publicDir, 'icons');
-const svgPath = path.join(iconsDir, 'icon-source.svg');
+const pngPath = path.resolve(__dirname, '../src/assets/vyntra_logo_cropped.png');
 
-if (!existsSync(iconsDir)) mkdirSync(iconsDir, { recursive: true });
-
-const svg = readFileSync(svgPath);
+const sourceImage = readFileSync(pngPath);
 
 async function writePng(filename, size, padding = 0) {
   const out = path.join(iconsDir, filename);
-  const inner = size - padding * 2;
-  const png = await sharp(svg)
-    .resize(inner, inner, { fit: 'contain', background: { r: 10, g: 10, b: 15, alpha: 1 } })
+  // Ensure we add at least 8% padding to prevent clipping on device home screens
+  const safePadding = padding || Math.round(size * 0.08);
+  const inner = size - safePadding * 2;
+  const png = await sharp(sourceImage)
+    .resize(inner, inner, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
     .extend({
-      top: padding,
-      bottom: padding,
-      left: padding,
-      right: padding,
-      background: { r: 10, g: 10, b: 15, alpha: 1 },
+      top: safePadding,
+      bottom: safePadding,
+      left: safePadding,
+      right: safePadding,
+      background: { r: 10, g: 10, b: 15, alpha: 1 }, // PWA icons look better with background
     })
     .png()
     .toBuffer();
@@ -34,6 +34,17 @@ await writePng('icon-192.png', 192);
 await writePng('icon-512.png', 512);
 await writePng('icon-maskable-512.png', 512, 64);
 
-const favicon = await sharp(svg).resize(32, 32).png().toBuffer();
+// Favicon needs to be transparent and padded safely to prevent tab clipping
+const favicon = await sharp(sourceImage)
+  .resize(26, 26, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
+  .extend({
+    top: 3,
+    bottom: 3,
+    left: 3,
+    right: 3,
+    background: { r: 0, g: 0, b: 0, alpha: 0 }
+  })
+  .png()
+  .toBuffer();
 writeFileSync(path.join(publicDir, 'favicon.ico'), favicon);
 console.log('Wrote favicon.ico');

@@ -3,3 +3,4 @@ export { Card } from './Card';
 export { Input } from './Input';
 export { Badge } from './Badge';
 export { Logo } from './Logo';
+export { ImageCropperModal } from './ImageCropperModal';

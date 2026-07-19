@@ -14,6 +14,7 @@ import {
   RegisterInput,
   LoginInput,
   ChangePasswordInput,
+  UpdateProfileInput,
 } from '../validators/auth.validator';
 
 async function getAutoLockMinutes() {
@@ -21,7 +22,15 @@ async function getAutoLockMinutes() {
   return config?.autoLockMinutes ?? env.AUTO_LOCK_MINUTES;
 }
 
-function publicUser(user: { id: string; email: string; name: string; emailVerified: boolean; googleId?: string | null; role?: string | null }) {
+function publicUser(user: {
+  id: string;
+  email: string;
+  name: string;
+  emailVerified: boolean;
+  googleId?: string | null;
+  role?: string | null;
+  avatarUrl?: string | null;
+}) {
   return {
     id: user.id,
     email: user.email,
@@ -29,6 +38,7 @@ function publicUser(user: { id: string; email: string; name: string; emailVerifi
     emailVerified: user.emailVerified,
     hasGoogleAccount: !!user.googleId,
     role: (user.role ?? 'USER') as 'USER' | 'ADMIN',
+    avatarUrl: user.avatarUrl ?? null,
   };
 }
 
@@ -280,6 +290,30 @@ export async function updateAutoLockSettings(userId: string, minutes: number) {
   const autoLockMinutes = minutes;
   const token = issueSessionToken(userId, autoLockMinutes);
   return { token, autoLockMinutes };
+}
+
+export async function updateProfile(userId: string, input: UpdateProfileInput) {
+  const user = await userRepo.findById(userId);
+  if (!user) throw new AppError('User not found', HTTP_STATUS.NOT_FOUND);
+
+  // If email is changing, ensure it is unique
+  if (input.email.toLowerCase() !== user.email.toLowerCase()) {
+    const existing = await userRepo.findByEmail(input.email);
+    if (existing) {
+      throw new AppError('An account with this email already exists', HTTP_STATUS.BAD_REQUEST);
+    }
+  }
+
+  const updated = await prisma.user.update({
+    where: { id: userId },
+    data: {
+      name: input.name.trim(),
+      email: input.email.toLowerCase(),
+      avatarUrl: input.avatarUrl ?? null,
+    },
+  });
+
+  return publicUser(updated);
 }
 
 

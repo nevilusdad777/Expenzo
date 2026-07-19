@@ -201,3 +201,12 @@ export async function updateAutoLockSettings(req: Request, res: Response, next: 
     next(err);
   }
 }
+
+export async function updateProfile(req: Request, res: Response, next: NextFunction) {
+  try {
+    const user = await authService.updateProfile(req.session!.userId, req.body);
+    res.status(HTTP_STATUS.OK).json({ success: true, data: user });
+  } catch (err) {
+    next(err);
+  }
+}

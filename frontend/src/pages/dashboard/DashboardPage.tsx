@@ -9,14 +9,20 @@ import { AccountBalancesList } from './AccountBalancesList';
 
 export function DashboardPage() {
   const currentYear = new Date().getFullYear();
-  const { data: summary, isLoading, isError } = useDashboardSummary();
+  const { data: summary, isLoading, isFetching, isError } = useDashboardSummary();
   const { data: trend } = useMonthlyTrend(currentYear);
 
-  if (isLoading) {
-    return <div className="text-sm text-text-secondary">Loading dashboard…</div>;
+  // Only show full-page spinner on true first load (no cached data)
+  // When data comes from cache, show it immediately while refreshing silently
+  if (isLoading && !summary) {
+    return (
+      <div className="flex h-48 items-center justify-center">
+        <span className="h-7 w-7 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+      </div>
+    );
   }
 
-  if (isError || !summary) {
+  if (isError && !summary) {
     return (
       <div className="text-sm text-danger">
         Failed to load dashboard. Check your connection to the backend.
@@ -24,11 +30,13 @@ export function DashboardPage() {
     );
   }
 
+  if (!summary) return null;
+
   return (
-    <div className="space-y-6 pb-6">
+    <div className="space-y-6 pb-6 overflow-hidden">
       <BalanceCard totalBalance={summary.totalBalance} netSavings={summary.netSavings} />
 
-      <div className="grid grid-cols-2 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-2 gap-3 sm:gap-6">
         <SummaryCard
           label="Income (This Month)"
           amount={summary.monthlyIncome}
@@ -44,17 +52,21 @@ export function DashboardPage() {
       </div>
 
       {trend && (
-        <div className="grid grid-cols-1 gap-6">
+        <div className="min-w-0">
           <MonthlyTrendChart data={trend} />
         </div>
       )}
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        <CategoryPieChart data={summary.topExpenseCategories} />
-        <RecentTransactionsList transactions={summary.recentTransactions} />
+        <div className="min-w-0">
+          <CategoryPieChart data={summary.topExpenseCategories} />
+        </div>
+        <div className="min-w-0">
+          <RecentTransactionsList transactions={summary.recentTransactions} />
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-6">
+      <div className="min-w-0">
         <AccountBalancesList />
       </div>
     </div>
