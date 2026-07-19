@@ -2,7 +2,6 @@ import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { FiHome, FiCreditCard, FiList, FiPlusCircle, FiLogOut, FiPieChart, FiSettings, FiSearch } from 'react-icons/fi';
 import { useAuth } from '@/context/AuthContext';
 import { useIsFetching } from '@tanstack/react-query';
-import toast from 'react-hot-toast';
 import { Logo } from '@/components/ui';
 
 function UserAvatar({ name, avatarUrl }: { name: string; avatarUrl?: string | null }) {

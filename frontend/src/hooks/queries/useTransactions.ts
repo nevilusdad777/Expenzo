@@ -113,7 +113,7 @@ export function useUpdateTransaction(id: string) {
   return useMutation({
     mutationFn: (input: UpdateTransactionInput) => updateTransaction(id, input),
 
-    onMutate: async (input) => {
+    onMutate: async () => {
       const dashKey = ['dashboard', 'summary', undefined, undefined];
       await queryClient.cancelQueries({ queryKey: dashKey });
       const previousDashboard = queryClient.getQueryData<DashboardSummary>(dashKey);

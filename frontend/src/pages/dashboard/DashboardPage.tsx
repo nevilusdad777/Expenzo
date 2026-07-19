@@ -9,7 +9,7 @@ import { AccountBalancesList } from './AccountBalancesList';
 
 export function DashboardPage() {
   const currentYear = new Date().getFullYear();
-  const { data: summary, isLoading, isFetching, isError } = useDashboardSummary();
+  const { data: summary, isLoading, isError } = useDashboardSummary();
   const { data: trend } = useMonthlyTrend(currentYear);
 
   // Only show full-page spinner on true first load (no cached data)
