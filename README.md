@@ -1,8 +1,8 @@
-# 📊 Expenzo — Sleek Personal Finance & Expense Tracker
+# 📊 Vyntra — Sleek Personal Finance & Expense Tracker
 
-Expenzo is a premium, secure, and modern personal finance tracker designed for individuals who want complete control over their money. It features a full multi-user authentication system (including Google Sign-In and Email OTP), interactive charting, comprehensive financial reports, and a dedicated, isolated Admin Panel for user management.
+Vyntra is a premium, secure, and modern personal finance tracker designed for individuals who want complete control over their money. It features a full multi-user authentication system (including Google Sign-In and Email OTP), interactive charting, comprehensive financial reports, and a dedicated, isolated Admin Panel for user management.
 
-Developed with a clean dark-mode UI, glassmorphic card layouts, and responsive panels, Expenzo is ready to showcase in portfolio deployments.
+Developed with a clean dark-mode UI, glassmorphic card layouts, and responsive panels, Vyntra is ready to showcase in portfolio deployments.
 
 ---
 
@@ -11,9 +11,13 @@ Developed with a clean dark-mode UI, glassmorphic card layouts, and responsive p
 ### 👤 User Application
 - **Google OAuth & Password Sign-in**: Secure authentication using password hash encryption or modern Google accounts.
 - **OTP Verification & Password Reset**: 6-digit email OTPs to verify new users and token-based reset links for forgotten passwords.
+- **Enforced Password Complexity**: Strict safety rules requiring strong, secure password structures.
 - **Interactive Financial Dashboard**: Total balance overview, dynamic income/expense summary, recent transactions, and accounts widgets.
+- **Optimistic UI Updates**: Instant transaction feedback (under 50ms) across all summary tiles and categories.
+- **Cache Persistence**: Offline/refresh persistence using TanStack React Query localStorage integration.
 - **Multi-Account Management**: Create and track Cash, Bank, Wallet, Credit Card, and Investment accounts with real-time balance calculations.
-- **Advanced Transactions**: Create income, expense, or transfer entries with categories, source/destination accounts, tags, and references.
+- **Advanced Transactions**: Create income, expense, or transfer entries with categories (including "Other" quick-descriptive categories), source/destination accounts, tags, and references.
+- **Interactive Circle Avatar Cropper**: Crop and pan profile pictures up to 4MB with canvas-based size optimization.
 - **Visual Analytics**: Interactive breakdowns of spending categories and account distributions using beautiful Recharts visualizations.
 - **Detailed Reports**: View income and expense statements, apply date ranges, and export statements directly to CSV.
 
@@ -30,6 +34,7 @@ Developed with a clean dark-mode UI, glassmorphic card layouts, and responsive p
 
 ### Frontend
 - **Framework**: React 19, TypeScript, Vite
+- **Cache Sync**: TanStack Persist Query Client (localStorage caching)
 - **Styling**: Tailwind CSS (modern color tokens, responsive glassmorphism)
 - **State Management & Queries**: TanStack Query (React Query)
 - **UI Elements & Icons**: React Icons, Framer Motion, React Hot Toast
@@ -38,7 +43,7 @@ Developed with a clean dark-mode UI, glassmorphic card layouts, and responsive p
 ### Backend
 - **Runtime & API**: Node.js, Express, TypeScript
 - **Database ORM**: Prisma ORM
-- **Database**: SQLite (scalable, file-based storage)
+- **Database**: PostgreSQL (Supabase integration with optimized compound indexing)
 - **Security**: JWT Session tokens, HTTP-Only secure cookies, bcrypt-hashed credentials
 - **Email Delivery**: Resend SDK (transactional email templates)
 
@@ -48,6 +53,7 @@ Developed with a clean dark-mode UI, glassmorphic card layouts, and responsive p
 
 ### Prerequisites
 - [Node.js](https://nodejs.org/) (v18+)
+- PostgreSQL Database URL (e.g. Supabase connection string)
 - [Resend](https://resend.com/) API Key (optional for development, fallback console-logging enabled)
 - Google Cloud Console Project (for Google Login client keys)
 
@@ -59,7 +65,8 @@ Developed with a clean dark-mode UI, glassmorphic card layouts, and responsive p
 2. Create a `.env` file based on `.env.example`:
    ```env
    PORT=5000
-   DATABASE_URL="file:./prisma/dev.db"
+   DATABASE_URL="your_postgresql_database_url"
+   DIRECT_URL="your_postgresql_direct_url"
    CORS_ORIGIN=http://localhost:5173
    SESSION_SECRET=your_jwt_secret_string
    
@@ -76,9 +83,9 @@ Developed with a clean dark-mode UI, glassmorphic card layouts, and responsive p
    ADMIN_DEFAULT_EMAIL=admin@financeapp.local
    ADMIN_DEFAULT_PASSWORD=Admin@123!
    ```
-3. Run migrations and client generation:
+3. Run database migrations:
    ```bash
-   npx prisma migrate dev
+   npx prisma db push
    npx prisma generate
    ```
 4. Start the backend:
@@ -102,4 +109,4 @@ Developed with a clean dark-mode UI, glassmorphic card layouts, and responsive p
 ## 🔒 Security Best Practices
 - **Session Decoupling**: Admin sessions and User sessions are fully separated to prevent authorization leaks.
 - **Dev-only OTP Fallback**: If email APIs are not configured or are in a sandbox limit, verification codes and links are printed directly to the backend CLI log for test verification.
-- **Cascading Deletes**: User deletions safely clean up accounts, transactions, and configurations via SQLite database integrity rules.
+- **Cascading Deletes**: User deletions safely clean up accounts, transactions, and configurations via PostgreSQL cascading rules.
