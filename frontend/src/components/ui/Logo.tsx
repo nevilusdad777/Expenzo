@@ -4,6 +4,8 @@ import vyntraWordmark from '../../assets/vyntra_wordmark.svg';
 
 interface LogoProps {
   variant?: 'navbar' | 'auth' | 'custom';
+  showIcon?: boolean;
+  showWordmark?: boolean;
   iconHeight?: number | string;
   wordmarkHeight?: number | string;
   gap?: number | string;
@@ -12,23 +14,31 @@ interface LogoProps {
 
 export const Logo: React.FC<LogoProps> = ({
   variant = 'navbar',
+  showIcon,
+  showWordmark,
   iconHeight,
   wordmarkHeight,
   gap,
   className = '',
 }) => {
+  let displayIcon = showIcon;
+  let displayWordmark = showWordmark;
+
   let resolvedIconHeight = iconHeight ?? 36;
-  let resolvedWordmarkHeight = wordmarkHeight ?? 20;
+  let resolvedWordmarkHeight = wordmarkHeight ?? 24;
   let resolvedGap = gap ?? 12;
 
   if (variant === 'navbar') {
-    resolvedIconHeight = iconHeight ?? 36;
-    resolvedWordmarkHeight = wordmarkHeight ?? 20;
-    resolvedGap = gap ?? 12;
+    displayIcon = showIcon ?? false;       // Remove icon from navbar, keep wordmark only
+    displayWordmark = showWordmark ?? true;
+    resolvedWordmarkHeight = wordmarkHeight ?? 24;
   } else if (variant === 'auth') {
-    resolvedIconHeight = iconHeight ?? 72;
-    resolvedWordmarkHeight = wordmarkHeight ?? 28;
-    resolvedGap = gap ?? 12;
+    displayIcon = showIcon ?? true;        // Remove wordmark from auth page, keep logo icon only
+    displayWordmark = showWordmark ?? false;
+    resolvedIconHeight = iconHeight ?? 64;
+  } else {
+    displayIcon = showIcon ?? true;
+    displayWordmark = showWordmark ?? true;
   }
 
   return (
@@ -36,18 +46,22 @@ export const Logo: React.FC<LogoProps> = ({
       className={`flex items-center ${className}`}
       style={{ gap: typeof resolvedGap === 'number' ? `${resolvedGap}px` : resolvedGap }}
     >
-      <img
-        src={vyntraIcon}
-        alt="Vyntra Icon"
-        style={{ height: typeof resolvedIconHeight === 'number' ? `${resolvedIconHeight}px` : resolvedIconHeight, width: 'auto', objectFit: 'contain' }}
-        className="select-none"
-      />
-      <img
-        src={vyntraWordmark}
-        alt="Vyntra Wordmark"
-        style={{ height: typeof resolvedWordmarkHeight === 'number' ? `${resolvedWordmarkHeight}px` : resolvedWordmarkHeight, width: 'auto', objectFit: 'contain' }}
-        className="select-none"
-      />
+      {displayIcon && (
+        <img
+          src={vyntraIcon}
+          alt="Vyntra Icon"
+          style={{ height: typeof resolvedIconHeight === 'number' ? `${resolvedIconHeight}px` : resolvedIconHeight, width: 'auto', objectFit: 'contain' }}
+          className="select-none"
+        />
+      )}
+      {displayWordmark && (
+        <img
+          src={vyntraWordmark}
+          alt="Vyntra Wordmark"
+          style={{ height: typeof resolvedWordmarkHeight === 'number' ? `${resolvedWordmarkHeight}px` : resolvedWordmarkHeight, width: 'auto', objectFit: 'contain' }}
+          className="select-none"
+        />
+      )}
     </div>
   );
 };

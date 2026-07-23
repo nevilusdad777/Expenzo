@@ -13,9 +13,17 @@ const app = express();
 
 app.use(helmet());
 
+const allowedOrigins = env.CORS_ORIGIN.split(',').map((o) => o.trim()).filter(Boolean);
+
 app.use(
 	cors({
-		origin: env.CORS_ORIGIN,
+		origin: (origin, callback) => {
+			if (!origin || allowedOrigins.includes(origin) || allowedOrigins.includes('*')) {
+				callback(null, true);
+			} else {
+				callback(new Error(`CORS policy error: Origin ${origin} not allowed`));
+			}
+		},
 		credentials: true,
 	})
 );

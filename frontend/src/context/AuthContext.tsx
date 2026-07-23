@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState, useCallback, ReactNode } from 'react';
 import { apiClient } from '@/services/apiClient';
+import { clearUserCache } from '@/lib/queryClient';
 
 export interface AuthUser {
   id: string;
@@ -56,6 +57,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     const handleUnauthorized = () => {
+      clearUserCache();
       setUser(null);
     };
     window.addEventListener('auth_unauthorized', handleUnauthorized);
@@ -78,6 +80,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const login = useCallback(async (email: string, password: string) => {
+    clearUserCache();
     const res = await apiClient.post<{
       success: boolean;
       data: { user: AuthUser; token: string; autoLockMinutes: number };
@@ -91,6 +94,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const register = useCallback(async (name: string, email: string, password: string) => {
+    clearUserCache();
     const res = await apiClient.post<{
       success: boolean;
       data: { user: AuthUser; token: string; autoLockMinutes: number };
@@ -104,6 +108,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const logout = useCallback(async () => {
+    clearUserCache();
     await apiClient.post('/api/auth/logout').catch(() => {});
     localStorage.removeItem('session_token');
     setUser(null);

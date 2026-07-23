@@ -1,9 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
-import { QueryClient } from '@tanstack/react-query';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
-import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
 import { Toaster } from 'react-hot-toast';
 import App from './App';
 import './index.css';
@@ -26,31 +24,7 @@ if ('caches' in window) {
   });
 }
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: 1,
-      // Data is "fresh" for 3 minutes — no background refetch during this window
-      staleTime: 1000 * 60 * 3,
-      // Keep data in memory for 10 minutes even when unused
-      gcTime: 1000 * 60 * 10,
-      refetchOnWindowFocus: false,
-      // Show cached data immediately while refetching silently in background
-      refetchOnMount: true,
-    },
-  },
-});
-
-// Persist cache to localStorage so page refresh shows instant data
-// Cache is versioned — bump CACHE_VERSION to force a clear on breaking changes
-const CACHE_VERSION = 'vyntra-v1';
-
-const localStoragePersister = createSyncStoragePersister({
-  storage: window.localStorage,
-  key: CACHE_VERSION,
-  // Throttle writes so we don't hammer localStorage on every keystroke
-  throttleTime: 1000,
-});
+import { queryClient, localStoragePersister } from '@/lib/queryClient';
 
 const rootElement = document.getElementById('root');
 
