@@ -12,12 +12,16 @@ import {
   type UpdateAccountInput,
 } from '@/services/accountsApi';
 
+import { useAuth } from '@/context/AuthContext';
+
 export function useAccounts(includeArchived = false) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['accounts', { includeArchived }],
+    queryKey: ['accounts', user?.id, { includeArchived }],
     queryFn: () => fetchAccounts(includeArchived),
-    staleTime: 1000 * 60 * 5, // 5 minutes — account balances don't change outside mutations
-    gcTime: 1000 * 60 * 15,
+    enabled: Boolean(user?.id),
+    staleTime: 0,
+    refetchOnMount: 'always',
   });
 }
 

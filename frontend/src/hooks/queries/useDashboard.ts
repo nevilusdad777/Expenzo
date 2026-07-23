@@ -1,20 +1,25 @@
 import { useQuery } from '@tanstack/react-query';
 import { fetchDashboardSummary, fetchMonthlyTrend } from '@/services/dashboardApi';
+import { useAuth } from '@/context/AuthContext';
 
 export function useDashboardSummary(month?: number, year?: number) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['dashboard', 'summary', month, year],
+    queryKey: ['dashboard', 'summary', user?.id, month, year],
     queryFn: () => fetchDashboardSummary(month, year),
-    staleTime: 1000 * 60 * 5,  // 5 minutes — dashboard data doesn't need frequent refresh
-    gcTime: 1000 * 60 * 15,    // 15 minutes in memory
+    enabled: Boolean(user?.id),
+    staleTime: 0,
+    refetchOnMount: 'always',
   });
 }
 
 export function useMonthlyTrend(year: number) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['dashboard', 'trend', year],
+    queryKey: ['dashboard', 'trend', user?.id, year],
     queryFn: () => fetchMonthlyTrend(year),
-    staleTime: 1000 * 60 * 5,  // 5 minutes
-    gcTime: 1000 * 60 * 15,    // 15 minutes
+    enabled: Boolean(user?.id),
+    staleTime: 0,
+    refetchOnMount: 'always',
   });
 }

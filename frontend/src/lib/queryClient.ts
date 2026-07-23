@@ -7,13 +7,11 @@ export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       retry: 1,
-      // Data is "fresh" for 3 minutes — no background refetch during this window
-      staleTime: 1000 * 60 * 3,
-      // Keep data in memory for 10 minutes even when unused
-      gcTime: 1000 * 60 * 10,
+      // Always fetch fresh data on mount to guarantee user isolation & accurate balances
+      staleTime: 0,
+      gcTime: 1000 * 60 * 5,
       refetchOnWindowFocus: false,
-      // Show cached data immediately while refetching silently in background
-      refetchOnMount: true,
+      refetchOnMount: 'always',
     },
   },
 });

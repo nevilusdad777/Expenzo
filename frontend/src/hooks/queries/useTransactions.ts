@@ -12,22 +12,28 @@ import type {
   UpdateTransactionInput,
 } from '@/types/transaction.types';
 import type { DashboardSummary } from '@/types/dashboard.types';
+import { useAuth } from '@/context/AuthContext';
 
 export function useTransactions(query: Omit<TransactionQuery, 'cursor'>) {
+  const { user } = useAuth();
   return useInfiniteQuery({
-    queryKey: ['transactions', query],
+    queryKey: ['transactions', user?.id, query],
     queryFn: ({ pageParam }) => fetchTransactions({ ...query, cursor: pageParam }),
     initialPageParam: undefined as string | undefined,
     getNextPageParam: (lastPage) => (lastPage.hasMore ? (lastPage.nextCursor ?? undefined) : undefined),
-    staleTime: 1000 * 60 * 2,
+    enabled: Boolean(user?.id),
+    staleTime: 0,
+    refetchOnMount: 'always',
   });
 }
 
 export function useTransaction(id: string) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['transactions', id],
+    queryKey: ['transactions', user?.id, id],
     queryFn: () => fetchTransaction(id),
-    enabled: Boolean(id),
+    enabled: Boolean(id && user?.id),
+    staleTime: 0,
   });
 }
 

@@ -42,14 +42,7 @@ createRoot(rootElement).render(
         maxAge: 1000 * 60 * 60 * 24,
         // Only persist queries, not mutations
         dehydrateOptions: {
-          shouldDehydrateQuery: (query) => {
-            // Persist dashboard and accounts — the heaviest/slowest data
-            const key = query.queryKey[0];
-            return (
-              query.state.status === 'success' &&
-              (key === 'dashboard' || key === 'accounts' || key === 'categories')
-            );
-          },
+          shouldDehydrateQuery: () => false, // Never persist user data in localStorage to prevent account data leaks across user sessions
         },
       }}
     >
