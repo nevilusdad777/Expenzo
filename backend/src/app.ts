@@ -18,10 +18,21 @@ const allowedOrigins = env.CORS_ORIGIN.split(',').map((o) => o.trim()).filter(Bo
 app.use(
 	cors({
 		origin: (origin, callback) => {
-			if (!origin || allowedOrigins.includes(origin) || allowedOrigins.includes('*')) {
+			if (!origin) return callback(null, true);
+
+			const isAllowed = allowedOrigins.some((allowed) => {
+				if (allowed === '*' || allowed === origin) return true;
+				// Dynamically match any Vercel deployment domain (*.vercel.app)
+				if ((allowed.includes('vercel.app') || allowed === '*') && origin.endsWith('.vercel.app')) {
+					return true;
+				}
+				return false;
+			});
+
+			if (isAllowed) {
 				callback(null, true);
 			} else {
-				callback(new Error(`CORS policy error: Origin ${origin} not allowed`));
+				callback(null, false);
 			}
 		},
 		credentials: true,
